@@ -7,12 +7,14 @@ export const DISCORD_URL = "https://discord.gg/obsverse";
 
 export function Navbar() {
   const navigate = useNavigate();
-  const search = useRouterState({ select: (s) => s.location.search as { q?: string } });
+  const search = useRouterState({
+    select: (s) => s.location.search as { q?: string; cat?: string },
+  });
   const [q, setQ] = useState(search.q ?? "");
   useEffect(() => setQ(search.q ?? ""), [search.q]);
 
   const submit = (value: string) =>
-    navigate({ to: "/", search: (prev: Record<string, unknown>) => ({ ...prev, q: value || undefined }) });
+    navigate({ to: "/", search: { q: value || undefined, cat: search.cat }, replace: true });
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-xl">

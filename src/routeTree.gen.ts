@@ -10,43 +10,33 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ApiSeedAdminRouteImport } from './routes/api/seed-admin'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiSeedAdminRoute = ApiSeedAdminRouteImport.update({
-  id: '/api/seed-admin',
-  path: '/api/seed-admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/api/seed-admin': typeof ApiSeedAdminRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/api/seed-admin': typeof ApiSeedAdminRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/api/seed-admin': typeof ApiSeedAdminRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/seed-admin'
+  fullPaths: '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/seed-admin'
-  id: '__root__' | '/' | '/api/seed-admin'
+  to: '/'
+  id: '__root__' | '/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ApiSeedAdminRoute: typeof ApiSeedAdminRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,19 +48,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/seed-admin': {
-      id: '/api/seed-admin'
-      path: '/api/seed-admin'
-      fullPath: '/api/seed-admin'
-      preLoaderRoute: typeof ApiSeedAdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ApiSeedAdminRoute: ApiSeedAdminRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

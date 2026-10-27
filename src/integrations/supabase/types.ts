@@ -14,13 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      products: {
+        Row: {
+          badge: string
+          category: string
+          created_at: string
+          features: string[]
+          gallery: string[]
+          id: string
+          is_featured: boolean
+          main_image: string | null
+          name: string
+          price: number
+          short_desc: string | null
+          tags: string[]
+          views: number
+          wa_link: string | null
+        }
+        Insert: {
+          badge?: string
+          category?: string
+          created_at?: string
+          features?: string[]
+          gallery?: string[]
+          id?: string
+          is_featured?: boolean
+          main_image?: string | null
+          name: string
+          price?: number
+          short_desc?: string | null
+          tags?: string[]
+          views?: number
+          wa_link?: string | null
+        }
+        Update: {
+          badge?: string
+          category?: string
+          created_at?: string
+          features?: string[]
+          gallery?: string[]
+          id?: string
+          is_featured?: boolean
+          main_image?: string | null
+          name?: string
+          price?: number
+          short_desc?: string | null
+          tags?: string[]
+          views?: number
+          wa_link?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_product_views: { Args: { _id: string }; Returns: undefined }
     }
     Enums: {
       [_ in never]: never

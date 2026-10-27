@@ -19,11 +19,11 @@ function SettingsPage() {
 
   const change = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (pw.length < 6) return toast.error("Password minimal 6 karakter");
+    if (pw.length < 6) { toast.error("Password minimal 6 karakter"); return; }
     setLoading(true);
     const { error } = await supabase.auth.updateUser({ password: pw, current_password: current } as never);
     setLoading(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Password diperbarui");
     setPw(""); setCurrent("");
   };

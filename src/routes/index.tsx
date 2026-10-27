@@ -11,12 +11,12 @@ import { cn } from "@/lib/utils";
 
 const FILTERS = ["Semua", "Rank", "Server Setup", "Lobby", "Spawn", "Best Seller"] as const;
 
-type Search = { q?: string; cat?: string };
+type Search = { q?: string | undefined; cat?: string | undefined };
 
 export const Route = createFileRoute("/")({
   validateSearch: (s: Record<string, unknown>): Search => ({
-    q: typeof s.q === "string" && s.q ? s.q : undefined,
-    cat: typeof s.cat === "string" && s.cat ? s.cat : undefined,
+    q: typeof s["q"] === "string" && s["q"] ? s["q"] : undefined,
+    cat: typeof s["cat"] === "string" && s["cat"] ? s["cat"] : undefined,
   }),
   head: () => ({
     meta: [

@@ -22,7 +22,7 @@ export function ProductTable({ showStats = false }: { showStats?: boolean }) {
 
   const remove = async (id: string) => {
     const { error } = await supabase.from("products").delete().eq("id", id);
-    if (error) return toast.error("Gagal menghapus: " + error.message);
+    if (error) { toast.error("Gagal menghapus: " + error.message); return; }
     toast.success("Produk dihapus");
     qc.invalidateQueries({ queryKey: ["products"] });
   };

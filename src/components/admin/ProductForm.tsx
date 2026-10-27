@@ -43,7 +43,7 @@ export function ProductForm({ product }: { product?: Product }) {
     if (!files) return;
     const room = 3 - f.gallery.length;
     const picked = Array.from(files).slice(0, room);
-    if (!picked.length) return toast.error("Maksimal 3 gambar galeri");
+    if (!picked.length) { toast.error("Maksimal 3 gambar galeri"); return; }
     setUploading("gallery");
     try {
       const urls = await Promise.all(picked.map(uploadProductImage));
@@ -54,7 +54,7 @@ export function ProductForm({ product }: { product?: Product }) {
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!f.name.trim()) return toast.error("Nama produk wajib diisi");
+    if (!f.name.trim()) { toast.error("Nama produk wajib diisi"); return; }
     setSaving(true);
     const payload = {
       name: f.name.trim(),
@@ -74,7 +74,7 @@ export function ProductForm({ product }: { product?: Product }) {
       ? await supabase.from("products").update(payload).eq("id", product.id)
       : await supabase.from("products").insert(payload);
     setSaving(false);
-    if (error) return toast.error("Gagal menyimpan: " + error.message);
+    if (error) { toast.error("Gagal menyimpan: " + error.message); return; }
     toast.success("Produk disimpan");
     qc.invalidateQueries({ queryKey: ["products"] });
     navigate({ to: "/admin" });

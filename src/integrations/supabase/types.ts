@@ -27,6 +27,7 @@ export type Database = {
           name: string
           price: number
           short_desc: string | null
+          sold: number
           tags: string[]
           views: number
           wa_link: string | null
@@ -43,6 +44,7 @@ export type Database = {
           name: string
           price?: number
           short_desc?: string | null
+          sold?: number
           tags?: string[]
           views?: number
           wa_link?: string | null
@@ -59,6 +61,7 @@ export type Database = {
           name?: string
           price?: number
           short_desc?: string | null
+          sold?: number
           tags?: string[]
           views?: number
           wa_link?: string | null

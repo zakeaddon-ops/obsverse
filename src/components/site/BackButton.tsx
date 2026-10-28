@@ -22,9 +22,13 @@ export function BackButton({ to = "/", label = "Kembali", className }: BackButto
   const [canGoBack, setCanGoBack] = useState(false);
 
   useEffect(() => {
-    const state = window.history.state as { idx?: number } | null;
-    setCanGoBack(typeof state?.idx === "number" ? state.idx > 0 : window.history.length > 1);
+    // TanStack Router stores its position in the history stack as `__TSR_index`;
+    // 0 means the visitor landed here directly, so there is nothing to return to.
+    const state = window.history.state as { __TSR_index?: number; idx?: number } | null;
+    const pos = state?.__TSR_index ?? state?.idx;
+    setCanGoBack(typeof pos === "number" ? pos > 0 : window.history.length > 1);
   }, []);
+
 
   const classes = cn(
     "-ml-3 mb-6 text-muted-foreground hover:bg-accent hover:text-primary-glow",

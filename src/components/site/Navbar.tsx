@@ -45,6 +45,12 @@ export function Navbar() {
             className="h-10 w-full rounded-full border border-border bg-card pl-10 pr-4 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
           />
         </form>
+        <Button variant="outline" className="shrink-0 rounded-full" asChild>
+          <Link to="/admin">
+            <Shield />
+            <span className="hidden sm:inline">Admin</span>
+          </Link>
+        </Button>
         <Button variant="hero" className="shrink-0 rounded-full" asChild>
           <a href={DISCORD_URL} target="_blank" rel="noreferrer">
             <MessageCircle />

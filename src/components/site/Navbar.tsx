@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Gem, MessageCircle, Search } from "lucide-react";
+import { Gem, MessageCircle, Search, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 

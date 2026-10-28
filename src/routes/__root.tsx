@@ -111,6 +111,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
+  defaultPendingComponent: PendingComponent,
 });
 
 function RootShell({ children }: { children: ReactNode }) {
@@ -118,6 +119,7 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="id" className="dark">
       <head>
         <HeadContent />
+        <style>{`html,body{background:#0a0a0a;color:#e9d5ff}`}</style>
       </head>
       <body>
         {children}

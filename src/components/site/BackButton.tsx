@@ -31,9 +31,11 @@ export function BackButton({ to = "/", label = "Kembali", className }: BackButto
 
 
   const classes = cn(
-    "-ml-3 mb-6 text-muted-foreground hover:bg-accent hover:text-primary-glow",
+    "mb-6 -ml-1 rounded-full border border-border bg-card px-4 text-secondary-foreground",
+    "hover:border-primary/50 hover:bg-accent hover:text-primary-glow",
     className,
   );
+
 
   if (canGoBack) {
     return (

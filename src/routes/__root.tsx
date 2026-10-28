@@ -74,6 +74,15 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   );
 }
 
+function PendingComponent() {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background">
+      <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      <p className="text-sm text-muted-foreground">Memuat obsVerse…</p>
+    </div>
+  );
+}
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -102,6 +111,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
+  pendingComponent: PendingComponent,
 });
 
 function RootShell({ children }: { children: ReactNode }) {
@@ -109,6 +119,7 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="id" className="dark">
       <head>
         <HeadContent />
+        <style>{`html,body{background:#0a0a0a;color:#e9d5ff}`}</style>
       </head>
       <body>
         {children}

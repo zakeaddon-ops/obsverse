@@ -1,8 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Check, ChevronLeft, ChevronRight, Eye, MessageCircle, MonitorPlay } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Eye, MessageCircle, MonitorPlay } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { BackButton } from "@/components/site/BackButton";
 import { DISCORD_URL, Footer, Navbar } from "@/components/site/Navbar";
+
 import { ProductBadge } from "@/components/site/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -44,9 +46,8 @@ function ProductDetail() {
     <div className="min-h-screen">
       <Navbar />
       <main className="mx-auto max-w-7xl px-4 py-8">
-        <Button variant="ghost" asChild className="mb-6 -ml-3 text-muted-foreground">
-          <Link to="/"><ArrowLeft /> Kembali</Link>
-        </Button>
+        <BackButton />
+
 
         {isLoading && <Skeleton className="aspect-video w-full rounded-2xl bg-card" />}
         {!isLoading && !p && (

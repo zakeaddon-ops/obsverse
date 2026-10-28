@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { BackButton } from "@/components/site/BackButton";
 import { Button } from "@/components/ui/button";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
@@ -30,7 +32,9 @@ function SettingsPage() {
 
   return (
     <div className="max-w-lg space-y-6">
+      <BackButton to="/admin" className="mb-0 -ml-3" />
       <h1 className="text-2xl font-bold">Settings</h1>
+
       <div className="rounded-2xl border border-border bg-card p-6">
         <div className="text-xs uppercase tracking-wider text-muted-foreground">Akun</div>
         <div className="mt-1 font-semibold">{user.email}</div>

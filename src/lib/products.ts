@@ -12,6 +12,8 @@ export const formatRupiah = (n: number) => "Rp " + (n ?? 0).toLocaleString("id-I
 
 export const productsQuery = queryOptions({
   queryKey: ["products"],
+  staleTime: 30_000,
+  retry: 2,
   queryFn: async () => {
     const { data, error } = await supabase
       .from("products")

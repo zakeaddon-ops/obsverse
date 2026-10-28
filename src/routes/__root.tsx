@@ -74,6 +74,15 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   );
 }
 
+function PendingComponent() {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background">
+      <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      <p className="text-sm text-muted-foreground">Memuat obsVerse…</p>
+    </div>
+  );
+}
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [

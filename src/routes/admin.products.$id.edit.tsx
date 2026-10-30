@@ -5,6 +5,15 @@ import { BackButton } from "@/components/site/BackButton";
 import { productQuery } from "@/lib/products";
 
 export const Route = createFileRoute("/admin/products/$id/edit")({
+  head: () => ({ meta: [
+    { title: "Edit Produk — obsVerse" },
+    { name: "description", content: "Perbarui informasi produk di obsVerse." },
+    { property: "og:title", content: "Edit Produk — obsVerse" },
+    { property: "og:description", content: "Perbarui informasi produk di obsVerse." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+    { name: "robots", content: "noindex" },
+  ] }),
   component: EditPage,
 });
 

@@ -29,7 +29,7 @@ export const Route = createFileRoute("/product/$id")({
 function ProductDetail() {
   const { id } = Route.useParams();
   useProductsRealtime();
-  const { data: p, isLoading } = useQuery(productQuery(id));
+  const { data: p, isLoading, error, refetch } = useQuery(productQuery(id));
   const [idx, setIdx] = useState(0);
   const counted = useRef<string | null>(null);
 
@@ -50,35 +50,36 @@ function ProductDetail() {
 
 
         {isLoading && <Skeleton className="aspect-video w-full rounded-2xl bg-card" />}
-        {!isLoading && !p && (
+        {error && <div className="py-16 text-center"><p className="text-muted-foreground">Produk belum dapat dimuat.</p><Button variant="outline" className="mt-4" onClick={() => refetch()}>Coba lagi</Button></div>}
+        {!isLoading && !error && !p && (
           <div className="py-24 text-center text-muted-foreground">Produk tidak ditemukan.</div>
         )}
         {p && (
-          <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr]">
+          <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
             <div>
               <div className="relative aspect-video overflow-hidden rounded-2xl border border-border bg-card">
                 {images[idx] && <img src={images[idx]} alt={p.name} className="h-full w-full object-cover" />}
                 {images.length > 1 && (
                   <>
-                    <button onClick={() => go(-1)} aria-label="Sebelumnya" className="absolute left-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-background/70 backdrop-blur hover:bg-primary">
+                    <Button variant="ghost" size="icon" onClick={() => go(-1)} aria-label="Sebelumnya" className="absolute left-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-background/70 backdrop-blur hover:bg-primary">
                       <ChevronLeft className="h-5 w-5" />
-                    </button>
-                    <button onClick={() => go(1)} aria-label="Berikutnya" className="absolute right-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-background/70 backdrop-blur hover:bg-primary">
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => go(1)} aria-label="Berikutnya" className="absolute right-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-background/70 backdrop-blur hover:bg-primary">
                       <ChevronRight className="h-5 w-5" />
-                    </button>
+                    </Button>
                   </>
                 )}
               </div>
               {images.length > 1 && (
                 <div className="mt-3 grid grid-cols-4 gap-3">
                   {images.map((src, i) => (
-                    <button key={src} onClick={() => setIdx(i)} className={cn("aspect-video overflow-hidden rounded-xl border-2 transition", i === idx ? "border-primary shadow-glow" : "border-border opacity-60 hover:opacity-100")}>
+                    <Button variant="ghost" aria-label={`Gambar ${i + 1}`} aria-pressed={i === idx} key={src} onClick={() => setIdx(i)} className={cn("h-auto aspect-video overflow-hidden rounded-lg border-2 p-0 transition", i === idx ? "border-primary shadow-glow" : "border-border opacity-60 hover:opacity-100")}>
                       <img src={src} alt="" loading="lazy" className="h-full w-full object-cover" />
-                    </button>
+                    </Button>
                   ))}
                 </div>
               )}
-              <section className="mt-8 rounded-2xl border border-border bg-card p-6">
+              <section className="mt-8 border-t border-border pt-6">
                 <h2 className="text-lg font-bold">Deskripsi</h2>
                 <p className="mt-3 whitespace-pre-line leading-relaxed text-muted-foreground">{p.short_desc}</p>
               </section>
@@ -97,7 +98,7 @@ function ProductDetail() {
                   <span key={t} className="rounded-md border border-border bg-muted px-2 py-0.5 text-xs">{t}</span>
                 ))}
               </div>
-              <div className="rounded-2xl border border-border bg-card p-6">
+              <div className="border-y border-border py-6">
                 <h2 className="mb-4 font-bold">Fitur</h2>
                 <ul className="space-y-3">
                   {p.features.map((f) => (

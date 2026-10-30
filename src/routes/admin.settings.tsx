@@ -10,6 +10,15 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin/settings")({
+  head: () => ({ meta: [
+    { title: "Pengaturan Akun — obsVerse" },
+    { name: "description", content: "Pengaturan akun pengelola obsVerse." },
+    { property: "og:title", content: "Pengaturan Akun — obsVerse" },
+    { property: "og:description", content: "Pengaturan akun pengelola obsVerse." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+    { name: "robots", content: "noindex" },
+  ] }),
   component: SettingsPage,
 });
 

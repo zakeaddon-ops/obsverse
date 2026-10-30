@@ -37,20 +37,20 @@ export function ProductTable({ showStats = false }: { showStats?: boolean }) {
         </div>
       )}
       <div className="flex flex-col gap-3 sm:flex-row">
-        <div className="relative flex-1">
+        <div className="relative min-w-0 flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input placeholder="Cari produk..." value={q} onChange={(e) => setQ(e.target.value)} className="h-10 bg-card pl-9" />
+          <Input aria-label="Cari produk admin" placeholder="Cari produk..." value={q} onChange={(e) => setQ(e.target.value)} className="h-10 bg-card pl-9" />
         </div>
         <Button variant="hero" className="h-10 rounded-xl" asChild>
           <Link to="/admin/products/new"><Plus /> Tambah Produk Baru</Link>
         </Button>
       </div>
-      <div className="overflow-x-auto rounded-2xl border border-border bg-card">
-        <table className="w-full min-w-[720px] text-sm">
+      <div className="min-w-0 overflow-x-auto rounded-2xl border border-border bg-card">
+        <table className="w-full text-sm">
           <thead className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
             <tr>
-              <th className="p-4">Produk</th><th className="p-4">Kategori</th><th className="p-4">Harga</th>
-              <th className="p-4">Badge</th><th className="p-4">Views</th><th className="p-4 text-right">Aksi</th>
+              <th className="p-4">Produk</th><th className="hidden p-4 lg:table-cell">Kategori</th><th className="hidden p-4 sm:table-cell">Harga</th>
+              <th className="hidden p-4 xl:table-cell">Badge</th><th className="hidden p-4 lg:table-cell">Views</th><th className="p-4 text-right">Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -59,23 +59,23 @@ export function ProductTable({ showStats = false }: { showStats?: boolean }) {
             {list.map((p) => (
               <tr key={p.id} className="border-b border-border last:border-0 hover:bg-muted/40">
                 <td className="p-4">
-                  <div className="flex items-center gap-3">
-                    {p.main_image ? <img src={p.main_image} alt="" className="h-10 w-16 rounded-md object-cover" /> : <div className="h-10 w-16 rounded-md bg-muted" />}
-                    <span className="font-semibold">{p.name}</span>
+                  <div className="flex min-w-0 items-center gap-3">
+                    {p.main_image ? <img src={p.main_image} alt="" className="hidden h-10 w-16 shrink-0 rounded-md sm:block object-cover" /> : <div className="hidden h-10 w-16 shrink-0 rounded-md sm:block bg-muted" />}
+                    <div className="min-w-0"><span className="block break-words font-semibold">{p.name}</span><span className="mt-1 block text-xs text-primary-glow sm:hidden">{formatRupiah(p.price)}</span></div>
                   </div>
                 </td>
-                <td className="p-4 text-muted-foreground">{p.category}</td>
-                <td className="p-4 font-semibold">{formatRupiah(p.price)}</td>
-                <td className="p-4">{p.badge === "None" ? <span className="text-muted-foreground">—</span> : <ProductBadge badge={p.badge} />}</td>
-                <td className="p-4 text-muted-foreground">{p.views}</td>
+                <td className="hidden p-4 text-muted-foreground lg:table-cell">{p.category}</td>
+                <td className="hidden p-4 font-semibold sm:table-cell">{formatRupiah(p.price)}</td>
+                <td className="hidden p-4 xl:table-cell">{p.badge === "None" ? <span className="text-muted-foreground">—</span> : <ProductBadge badge={p.badge} />}</td>
+                <td className="hidden p-4 text-muted-foreground lg:table-cell">{p.views}</td>
                 <td className="p-4">
                   <div className="flex justify-end gap-2">
                     <Button size="sm" variant="soft" asChild>
-                      <Link to="/admin/products/$id/edit" params={{ id: p.id }}><Pencil /> Edit</Link>
+                      <Link to="/admin/products/$id/edit" params={{ id: p.id }} aria-label={`Edit ${p.name}`} title="Edit produk"><Pencil /><span className="hidden sm:inline">Edit</span></Link>
                     </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button size="sm" variant="outline"><Trash2 /> Delete</Button>
+                        <Button size="sm" variant="outline" aria-label={`Hapus ${p.name}`} title="Hapus produk"><Trash2 /><span className="hidden sm:inline">Hapus</span></Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>

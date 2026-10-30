@@ -14,3 +14,5 @@
 - Admin pages live under `src/routes/admin*.tsx` with a client-only (`ssr:false`) `beforeLoad` guard; login is `admin_.login.tsx` so it sits outside that guard.
 - Back navigation on both store and admin pages goes through the shared `BackButton` component, which reads the router's position in the history stack to pick between returning to the previous page and linking to a fallback route. Why: visitors who open a page directly have no previous page, and `history.back()` would drop them out of the site.
 
+
+- Store navigation feedback lives in the root layout, and the shared navbar debounces search updates. Why: avoid per-keystroke navigation churn while keeping page transitions visible.

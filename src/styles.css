@@ -88,7 +88,7 @@
   --sidebar-ring: oklch(0.709 0.159 293.5);
 
   --gradient-primary: linear-gradient(135deg, var(--primary-glow), var(--primary) 50%, var(--primary-deep));
-  --gradient-hero-overlay: linear-gradient(180deg, color-mix(in oklab, var(--background) 55%, transparent) 0%, color-mix(in oklab, var(--background) 75%, transparent) 60%, var(--background) 100%);
+  --gradient-hero-overlay: linear-gradient(180deg, color-mix(in oklab, var(--background) 35%, transparent) 0%, color-mix(in oklab, var(--background) 65%, transparent) 60%, var(--background) 100%);
   --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--primary-glow) 45%, transparent), 0 20px 50px -15px color-mix(in oklab, var(--primary) 60%, transparent);
   --shadow-button: 0 8px 24px -8px color-mix(in oklab, var(--primary) 70%, transparent);
 }
@@ -127,4 +127,15 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; scroll-padding-top: 8rem; }
+  body { min-width: 320px; }
+  h1, h2, h3, h4 { overflow-wrap: anywhere; letter-spacing: 0; }
+  input[type="search"]::-webkit-search-cancel-button { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
 }

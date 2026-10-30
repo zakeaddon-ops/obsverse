@@ -68,6 +68,21 @@ export type Database = {
         }
         Relationships: []
       }
+      store_settings: {
+        Row: {
+          id: number
+          whatsapp_url: string
+        }
+        Insert: {
+          id?: number
+          whatsapp_url?: string
+        }
+        Update: {
+          id?: number
+          whatsapp_url?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string

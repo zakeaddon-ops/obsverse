@@ -61,17 +61,17 @@ function Index() {
       <section className="relative overflow-hidden">
         <img src={heroImg} alt="Gua geode amethyst Minecraft" width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-hero-overlay" />
-        <div className="relative mx-auto max-w-7xl px-4 pb-10 pt-12 text-center md:pb-12 md:pt-16">
+        <div className="relative mx-auto max-w-7xl px-4 pb-5 pt-6 text-center sm:pb-12 sm:pt-16">
           <span className="inline-block rounded-full border border-primary/40 bg-accent/60 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-glow backdrop-blur">
             Premium Amethyst Store
           </span>
-          <h1 className="mt-5 font-display text-6xl font-bold leading-tight sm:text-7xl">obs<span className="text-gradient">Verse</span></h1>
-          <h2 className="mx-auto mt-4 max-w-3xl text-2xl font-bold leading-tight sm:text-4xl">UPGRADE YOUR <span className="text-gradient">MINECRAFT</span> EXPERIENCE</h2>
-          <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-secondary-foreground sm:text-base">
+          <h1 className="mt-3 font-display text-5xl sm:mt-5 font-bold leading-tight sm:text-7xl">obs<span className="text-gradient">Verse</span></h1>
+          <h2 className="mx-auto mt-2 max-w-3xl text-xl sm:mt-4 font-bold leading-tight sm:text-4xl">UPGRADE YOUR <span className="text-gradient">MINECRAFT</span> EXPERIENCE</h2>
+          <p className="mx-auto mt-3 max-w-2xl sm:mt-5 text-sm leading-relaxed text-secondary-foreground sm:text-base">
             Rank & Server Setup Premium untuk Server Minecraft Indonesia - Desain Amethyst Eksklusif
           </p>
-          <Button variant="hero" size="lg" className="mt-7 rounded-lg" asChild><a href="#katalog">Jelajahi Produk <ArrowDown /></a></Button>
-          <div className="mx-auto mt-9 grid max-w-xl grid-cols-3 divide-x divide-border border-t border-border/60 pt-6">
+          <Button variant="hero" size="lg" className="mt-4 rounded-lg sm:mt-7" asChild><a href="#katalog">Jelajahi Produk <ArrowDown /></a></Button>
+          <div className="mx-auto mt-5 grid max-w-xl sm:mt-9 grid-cols-3 divide-x divide-border border-t border-border/60 pt-3 sm:pt-6">
             <Stat icon={<Package />} label="Total Produk" value={String(products?.length ?? 0)} />
             <Stat icon={<ShoppingBag />} label="Total Terjual" value={totalSold.toLocaleString("id-ID")} />
             <Stat icon={<Star />} label="Rating" value="5.0" />
@@ -134,7 +134,7 @@ function Index() {
 function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
     <div className="px-2 text-center">
-      <div className="mx-auto mb-2 grid h-7 w-7 place-items-center text-primary-glow [&_svg]:h-5 [&_svg]:w-5">
+      <div className="mx-auto mb-2 hidden h-7 sm:grid w-7 place-items-center text-primary-glow [&_svg]:h-5 [&_svg]:w-5">
         {icon}
       </div>
       <div className="font-display text-xl font-bold md:text-2xl">{value}</div>

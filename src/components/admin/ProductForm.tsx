@@ -81,8 +81,8 @@ export function ProductForm({ product }: { product?: Product }) {
   };
 
   return (
-    <form onSubmit={save} className="grid gap-6 lg:grid-cols-[1fr_340px]">
-      <div className="space-y-5 rounded-2xl border border-border bg-card p-6">
+    <form onSubmit={save} className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="space-y-5 rounded-2xl border border-border bg-card p-4 sm:p-6">
         <Field label="Product Name"><Input value={f.name} onChange={(e) => set("name", e.target.value)} required /></Field>
         <div className="grid gap-5 sm:grid-cols-2">
           <Field label="Category">
@@ -111,7 +111,7 @@ export function ProductForm({ product }: { product?: Product }) {
       </div>
 
       <div className="space-y-5">
-        <div className="rounded-2xl border border-border bg-card p-5">
+        <div className="rounded-2xl border border-border bg-card p-4 sm:p-5">
           <Label>Main Image</Label>
           <label className="mt-3 grid aspect-video cursor-pointer place-items-center overflow-hidden rounded-xl border-2 border-dashed border-border hover:border-primary">
             {uploading === "main" ? <Loader2 className="animate-spin text-primary-glow" /> : f.main_image ? (
@@ -122,7 +122,7 @@ export function ProductForm({ product }: { product?: Product }) {
             <input type="file" accept="image/*" hidden onChange={(e) => onMain(e.target.files?.[0])} />
           </label>
         </div>
-        <div className="rounded-2xl border border-border bg-card p-5">
+        <div className="rounded-2xl border border-border bg-card p-4 sm:p-5">
           <Label>Gallery Images ({f.gallery.length}/3)</Label>
           <div className="mt-3 grid grid-cols-3 gap-2">
             {f.gallery.map((g, i) => (

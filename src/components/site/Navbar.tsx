@@ -1,6 +1,6 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Gem, MessageCircle, Search, Shield } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Gem, MessageCircle, Search, Shield, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export const DISCORD_URL = "https://discord.gg/obsverse";
@@ -10,6 +10,8 @@ export function Navbar() {
   const search = useRouterState({
     select: (s) => s.location.search as { q?: string; cat?: string },
   });
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
   const [q, setQ] = useState(search.q ?? "");
   useEffect(() => setQ(search.q ?? ""), [search.q]);
 
@@ -17,21 +19,22 @@ export function Navbar() {
     navigate({ to: "/", search: { q: value || undefined, cat: search.cat }, replace: true });
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 md:gap-6">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-md">
+      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 px-4 py-3 sm:grid-cols-[auto_minmax(0,1fr)_auto_auto] sm:gap-4">
         <Link to="/" className="flex shrink-0 items-center gap-2">
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-primary shadow-button">
             <Gem className="h-5 w-5 text-primary-foreground" />
           </span>
-          <span className="hidden font-display text-xl font-bold tracking-tight sm:inline">
+          <span className="font-display text-xl font-bold">
             obs<span className="text-gradient">Verse</span>
           </span>
         </Link>
         <form
-          className="relative flex-1"
+          className="relative col-span-3 row-start-2 min-w-0 sm:col-span-1 sm:col-start-2 sm:row-start-1"
           onSubmit={(e) => {
             e.preventDefault();
-            submit(q);
+            if (timer.current) clearTimeout(timer.current);
+            submit(q.trim());
           }}
         >
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -39,20 +42,25 @@ export function Navbar() {
             value={q}
             onChange={(e) => {
               setQ(e.target.value);
-              submit(e.target.value);
+              if (timer.current) clearTimeout(timer.current);
+              const value = e.target.value;
+              timer.current = setTimeout(() => submit(value), 220);
             }}
+            aria-label="Cari produk"
+            type="search"
             placeholder="Cari Rank, Setup, Lobby..."
-            className="h-10 w-full rounded-full border border-border bg-card pl-10 pr-4 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+            className="h-10 w-full rounded-lg border border-border bg-card pl-10 pr-10 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
           />
+          {q && <Button type="button" variant="ghost" size="icon" aria-label="Hapus pencarian" className="absolute right-1 top-0.5 h-9 w-9" onClick={() => { if (timer.current) clearTimeout(timer.current); setQ(""); submit(""); }}><X /></Button>}
         </form>
-        <Button variant="outline" className="shrink-0 rounded-full" asChild>
-          <Link to="/admin">
+        <Button variant="outline" className="shrink-0 rounded-lg" asChild>
+          <Link to="/admin" aria-label="Admin" title="Admin">
             <Shield />
             <span className="hidden sm:inline">Admin</span>
           </Link>
         </Button>
-        <Button variant="hero" className="shrink-0 rounded-full" asChild>
-          <a href={DISCORD_URL} target="_blank" rel="noreferrer">
+        <Button variant="hero" className="shrink-0 rounded-lg" asChild>
+          <a href={DISCORD_URL} aria-label="Discord" title="Discord" target="_blank" rel="noreferrer">
             <MessageCircle />
             <span className="hidden sm:inline">Discord</span>
           </a>
@@ -64,10 +72,11 @@ export function Navbar() {
 
 export function Footer() {
   return (
-    <footer className="mt-20 border-t border-border py-8 text-center text-sm text-muted-foreground">
-      <div className="flex items-center justify-center gap-2">
+    <footer className="mt-16 border-t border-border px-4 py-8 text-sm text-muted-foreground">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4">
         <Gem className="h-4 w-4 text-primary-glow" />
-        obsVerse © 2026 - Premium Amethyst Minecraft Solutions
+        <span className="mr-auto font-display font-semibold text-foreground">obsVerse</span>
+        <span>© 2026 · Minecraft Store</span>
       </div>
     </footer>
   );

@@ -1,10 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Package, ShoppingBag, Star } from "lucide-react";
+import { ArrowDown, Package, SearchX, ShoppingBag, Star, Gem } from "lucide-react";
 import { useMemo } from "react";
 import heroImg from "@/assets/hero.jpg";
 import { Footer, Navbar } from "@/components/site/Navbar";
 import { ProductCard } from "@/components/site/ProductCard";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { productsQuery, useProductsRealtime } from "@/lib/products";
 import { cn } from "@/lib/utils";
@@ -60,17 +61,17 @@ function Index() {
       <section className="relative overflow-hidden">
         <img src={heroImg} alt="Gua geode amethyst Minecraft" width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-hero-overlay" />
-        <div className="relative mx-auto max-w-7xl px-4 py-24 text-center md:py-36">
+        <div className="relative mx-auto max-w-7xl px-4 pb-10 pt-12 text-center md:pb-12 md:pt-16">
           <span className="inline-block rounded-full border border-primary/40 bg-accent/60 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-glow backdrop-blur">
             Premium Amethyst Store
           </span>
-          <h1 className="mx-auto mt-6 max-w-4xl text-4xl font-bold leading-[1.05] tracking-tight md:text-7xl">
-            UPGRADE YOUR <span className="text-gradient">MINECRAFT</span> EXPERIENCE
-          </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-base text-secondary-foreground md:text-lg">
+          <h1 className="mt-5 font-display text-6xl font-bold leading-tight sm:text-7xl">obs<span className="text-gradient">Verse</span></h1>
+          <h2 className="mx-auto mt-4 max-w-3xl text-2xl font-bold leading-tight sm:text-4xl">UPGRADE YOUR <span className="text-gradient">MINECRAFT</span> EXPERIENCE</h2>
+          <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-secondary-foreground sm:text-base">
             Rank & Server Setup Premium untuk Server Minecraft Indonesia - Desain Amethyst Eksklusif
           </p>
-          <div className="mx-auto mt-10 grid max-w-2xl grid-cols-3 gap-3">
+          <Button variant="hero" size="lg" className="mt-7 rounded-lg" asChild><a href="#katalog">Jelajahi Produk <ArrowDown /></a></Button>
+          <div className="mx-auto mt-9 grid max-w-xl grid-cols-3 divide-x divide-border border-t border-border/60 pt-6">
             <Stat icon={<Package />} label="Total Produk" value={String(products?.length ?? 0)} />
             <Stat icon={<ShoppingBag />} label="Total Terjual" value={totalSold.toLocaleString("id-ID")} />
             <Stat icon={<Star />} label="Rating" value="5.0" />
@@ -78,21 +79,27 @@ function Index() {
         </div>
       </section>
 
-      <main className="mx-auto max-w-7xl px-4">
-        <div className="-mt-2 flex gap-2 overflow-x-auto pb-2 pt-8">
+      <main id="katalog" className="mx-auto max-w-7xl scroll-mt-36 px-4 pt-9 sm:scroll-mt-24">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
+          <div className="min-w-0"><p className="text-xs font-semibold uppercase text-primary-glow">Koleksi obsVerse</p><h2 className="mt-1 text-2xl font-bold sm:text-3xl">Temukan upgrade-mu.</h2></div>
+          <span className="text-xs text-muted-foreground">{products?.length ?? 0} produk</span>
+        </div>
+        <div className="mt-5 flex gap-2 overflow-x-auto pb-2">
           {FILTERS.map((f) => (
-            <button
+            <Button
+              variant="ghost"
+              aria-pressed={active === f}
               key={f}
               onClick={() => navigate({ search: (prev) => ({ ...prev, cat: f === "Semua" ? undefined : f }) })}
               className={cn(
-                "shrink-0 rounded-full border px-5 py-2 text-sm font-semibold transition",
+                "h-10 shrink-0 rounded-full border px-4 text-sm font-semibold transition",
                 active === f
                   ? "border-transparent bg-gradient-primary text-primary-foreground shadow-button"
                   : "border-border bg-card text-muted-foreground hover:border-primary/60 hover:text-foreground",
               )}
             >
               {f}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -102,16 +109,21 @@ function Index() {
           </p>
         )}
 
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {isLoading &&
             Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="aspect-[4/5] rounded-2xl bg-card" />)}
           {filtered.map((p) => (
             <ProductCard key={p.id} p={p} />
           ))}
         </div>
-        {error && <p className="mt-10 text-center text-muted-foreground">Gagal memuat produk. Coba refresh halaman.</p>}
+        {error && <div className="py-16 text-center"><p className="text-muted-foreground">Produk belum dapat dimuat.</p><Button variant="outline" className="mt-4" onClick={() => window.location.reload()}>Coba lagi</Button></div>}
         {!isLoading && !error && filtered.length === 0 && (
-          <p className="mt-16 text-center text-muted-foreground">Produk tidak ditemukan.</p>
+          <div className="flex min-h-60 flex-col items-center justify-center border-y border-border py-12 text-center">
+            <span className="mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-accent text-primary-glow">{q || cat ? <SearchX className="h-6 w-6" /> : <Gem className="h-6 w-6" />}</span>
+            <h3 className="text-lg font-semibold">{q || cat ? "Produk tidak ditemukan" : "Koleksi baru segera hadir"}</h3>
+            <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">{q || cat ? "Coba kata kunci atau kategori lainnya." : "Belum ada produk yang tersedia saat ini."}</p>
+            {(q || cat) && <Button variant="soft" className="mt-5" onClick={() => navigate({ search: { q: undefined, cat: undefined } })}>Lihat semua produk</Button>}
+          </div>
         )}
       </main>
       <Footer />
@@ -121,8 +133,8 @@ function Index() {
 
 function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-border bg-card/70 p-4 backdrop-blur">
-      <div className="mx-auto mb-2 grid h-9 w-9 place-items-center rounded-lg bg-accent text-primary-glow [&_svg]:h-5 [&_svg]:w-5">
+    <div className="px-2 text-center">
+      <div className="mx-auto mb-2 grid h-7 w-7 place-items-center text-primary-glow [&_svg]:h-5 [&_svg]:w-5">
         {icon}
       </div>
       <div className="font-display text-xl font-bold md:text-2xl">{value}</div>

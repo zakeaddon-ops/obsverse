@@ -16,6 +16,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
+import { PrivateWhatsAppChat } from "@/components/site/PrivateWhatsAppChat";
 
 function NotFoundComponent() {
   return (
@@ -141,6 +142,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {hydrated && isNavigating && <div role="progressbar" aria-label="Memuat halaman" className="fixed inset-x-0 top-0 z-50 h-1 animate-pulse bg-gradient-primary" />}
       <Outlet />
+      <PrivateWhatsAppChat />
       <Toaster theme="dark" />
     </QueryClientProvider>
   );

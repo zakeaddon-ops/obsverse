@@ -13,3 +13,11 @@ export function normalizeWhatsApp(value: string): string {
 export function safeWhatsApp(value: string | null | undefined): string {
   try { return normalizeWhatsApp(value ?? ""); } catch { return ""; }
 }
+
+/** Prepare a private conversation without sending or storing the message. */
+export function privateWhatsAppLink(value: string | null | undefined, message: string): string {
+  const destination = safeWhatsApp(value);
+  const text = message.trim();
+  if (!destination || !text) return "";
+  return `${destination}?text=${encodeURIComponent(text)}`;
+}

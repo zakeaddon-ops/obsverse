@@ -4,9 +4,9 @@
 - [x] Check public interactions, authenticated admin layouts, existing tests and page metadata.
 
 # WhatsApp contact
-- [ ] Replace Discord links with WhatsApp and add admin-editable store contact.
-- [ ] Verify saving contact, public buttons, and validation.
+- [x] Replace Discord links with WhatsApp and add admin-editable store contact.
+- [x] Verify authenticated saving/readback of empty contact, public disabled buttons, and invalid input rejection; no real number supplied.
 
 # Login recovery
-- [ ] Diagnose login errors and prevent failed requests from leaving the login button stuck.
-- [ ] Verify login feedback and authenticated admin access.
+- [x] Diagnose login errors and prevent failed requests from leaving the login button stuck.
+- [x] Verify network-error login feedback, password visibility, and authenticated admin access; eliminate initial-render mismatch.

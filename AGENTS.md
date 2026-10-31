@@ -16,3 +16,4 @@
 
 
 - Store navigation feedback lives in the root layout, and the shared navbar debounces search updates. Why: avoid per-keystroke navigation churn while keeping page transitions visible.
+- Store contact uses a shared settings query and WhatsApp normalization helper, with product-specific contact taking precedence. Why: admin changes must reach every contact surface without unsafe or fabricated destinations.

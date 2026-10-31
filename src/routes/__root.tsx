@@ -5,6 +5,7 @@ import {
   createRootRouteWithContext,
   useRouter,
   useRouterState,
+  useHydrated,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -133,11 +134,12 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const hydrated = useHydrated();
   const isNavigating = useRouterState({ select: (state) => state.status === "pending" });
 
   return (
     <QueryClientProvider client={queryClient}>
-      {isNavigating && <div role="progressbar" aria-label="Memuat halaman" className="fixed inset-x-0 top-0 z-50 h-1 animate-pulse bg-gradient-primary" />}
+      {hydrated && isNavigating && <div role="progressbar" aria-label="Memuat halaman" className="fixed inset-x-0 top-0 z-50 h-1 animate-pulse bg-gradient-primary" />}
       <Outlet />
       <Toaster theme="dark" />
     </QueryClientProvider>

@@ -2,11 +2,14 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Gem, MessageCircle, Search, Shield, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-
-export const DISCORD_URL = "https://discord.gg/obsverse";
+import { useQuery } from "@tanstack/react-query";
+import { storeSettingsQuery } from "@/lib/store-settings";
+import { safeWhatsApp } from "@/lib/whatsapp";
 
 export function Navbar() {
   const navigate = useNavigate();
+  const { data: settings } = useQuery(storeSettingsQuery);
+  const whatsapp = safeWhatsApp(settings?.whatsapp_url);
   const search = useRouterState({
     select: (s) => s.location.search as { q?: string; cat?: string },
   });
@@ -59,12 +62,12 @@ export function Navbar() {
             <span className="hidden sm:inline">Admin</span>
           </Link>
         </Button>
-        <Button variant="hero" className="shrink-0 rounded-lg" asChild>
-          <a href={DISCORD_URL} aria-label="Discord" title="Discord" target="_blank" rel="noreferrer">
+        {whatsapp ? <Button variant="hero" className="shrink-0 rounded-lg" asChild>
+          <a href={whatsapp} aria-label="WhatsApp" title="WhatsApp" target="_blank" rel="noreferrer">
             <MessageCircle />
-            <span className="hidden sm:inline">Discord</span>
+            <span className="hidden sm:inline">WhatsApp</span>
           </a>
-        </Button>
+        </Button> : <Button variant="hero" className="shrink-0 rounded-lg" disabled aria-label="WhatsApp belum tersedia" title="WhatsApp belum tersedia"><MessageCircle /><span className="hidden sm:inline">WhatsApp</span></Button>}
       </div>
     </header>
   );

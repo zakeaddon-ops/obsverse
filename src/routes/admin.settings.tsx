@@ -8,8 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { storeSettingsQuery } from "@/lib/store-settings";
+import { normalizeWhatsApp } from "@/lib/whatsapp";
 
 export const Route = createFileRoute("/admin/settings")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(storeSettingsQuery),
   head: () => ({ meta: [
     { title: "Pengaturan Akun — obsVerse" },
     { name: "description", content: "Pengaturan akun pengelola obsVerse." },
@@ -24,25 +28,53 @@ export const Route = createFileRoute("/admin/settings")({
 
 function SettingsPage() {
   const { user } = Route.useRouteContext();
+  const qc = useQueryClient();
+  const { data: settings } = useSuspenseQuery(storeSettingsQuery);
+  const [whatsapp, setWhatsapp] = useState(settings?.whatsapp_url ?? "");
+  const [savingContact, setSavingContact] = useState(false);
   const [current, setCurrent] = useState("");
   const [pw, setPw] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const saveContact = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingContact(true);
+    try {
+      const whatsapp_url = normalizeWhatsApp(whatsapp);
+      const { error } = await supabase.from("store_settings").upsert({ id: 1, whatsapp_url });
+      if (error) throw error;
+      setWhatsapp(whatsapp_url);
+      await qc.invalidateQueries({ queryKey: ["store-settings"] });
+      toast.success("WhatsApp toko disimpan");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "WhatsApp gagal disimpan. Coba lagi.");
+    } finally { setSavingContact(false); }
+  };
 
   const change = async (e: React.FormEvent) => {
     e.preventDefault();
     if (pw.length < 6) { toast.error("Password minimal 6 karakter"); return; }
     setLoading(true);
-    const { error } = await supabase.auth.updateUser({ password: pw, current_password: current } as never);
-    setLoading(false);
-    if (error) { toast.error(error.message); return; }
-    toast.success("Password diperbarui");
-    setPw(""); setCurrent("");
+    try {
+      const { error } = await supabase.auth.updateUser({ password: pw, current_password: current });
+      if (error) throw error;
+      toast.success("Password diperbarui");
+      setPw(""); setCurrent("");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Password gagal diperbarui. Coba lagi.");
+    } finally { setLoading(false); }
   };
 
   return (
     <div className="max-w-lg space-y-6">
       <BackButton to="/admin" className="mb-0 -ml-3" />
       <h1 className="text-2xl font-bold">Settings</h1>
+
+      <form onSubmit={saveContact} className="space-y-4 border-y border-border py-6">
+        <h2 className="font-bold">WhatsApp Toko</h2>
+        <div className="space-y-2"><Label htmlFor="store-whatsapp">Nomor atau tautan WhatsApp</Label><Input id="store-whatsapp" type="text" placeholder="https://wa.me/62…" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} /></div>
+        <Button variant="hero" type="submit" disabled={savingContact}>{savingContact && <Loader2 className="animate-spin" />} Simpan WhatsApp</Button>
+      </form>
 
       <div className="rounded-2xl border border-border bg-card p-6">
         <div className="text-xs uppercase tracking-wider text-muted-foreground">Akun</div>

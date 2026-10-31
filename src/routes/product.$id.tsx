@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Check, ChevronLeft, ChevronRight, Eye, MessageCircle, MonitorPlay } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Eye, MessageCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { BackButton } from "@/components/site/BackButton";
-import { DISCORD_URL, Footer, Navbar } from "@/components/site/Navbar";
+import { Footer, Navbar } from "@/components/site/Navbar";
+import { storeSettingsQuery } from "@/lib/store-settings";
+import { safeWhatsApp } from "@/lib/whatsapp";
 
 import { ProductBadge } from "@/components/site/ProductCard";
 import { Button } from "@/components/ui/button";
@@ -30,6 +32,8 @@ function ProductDetail() {
   const { id } = Route.useParams();
   useProductsRealtime();
   const { data: p, isLoading, error, refetch } = useQuery(productQuery(id));
+  const { data: settings } = useQuery(storeSettingsQuery);
+  const whatsapp = safeWhatsApp(p?.wa_link) || safeWhatsApp(settings?.whatsapp_url);
   const [idx, setIdx] = useState(0);
   const counted = useRef<string | null>(null);
 
@@ -111,13 +115,10 @@ function ProductDetail() {
                   ))}
                 </ul>
               </div>
-              <div className="grid gap-3 sm:grid-cols-2">
-                <Button variant="hero" size="lg" className="h-12 rounded-xl" asChild>
-                  <a href={p.wa_link || "#"} target="_blank" rel="noreferrer"><MessageCircle /> Beli via WhatsApp</a>
-                </Button>
-                <Button variant="soft" size="lg" className="h-12 rounded-xl" asChild>
-                  <a href={DISCORD_URL} target="_blank" rel="noreferrer"><MonitorPlay /> Preview Server</a>
-                </Button>
+              <div className="grid gap-3">
+                {whatsapp ? <Button variant="hero" size="lg" className="h-12 rounded-xl" asChild>
+                  <a href={whatsapp} target="_blank" rel="noreferrer"><MessageCircle /> Beli via WhatsApp</a>
+                </Button> : <Button variant="hero" size="lg" className="h-12 rounded-xl" disabled><MessageCircle /> WhatsApp belum tersedia</Button>}
               </div>
             </div>
           </div>

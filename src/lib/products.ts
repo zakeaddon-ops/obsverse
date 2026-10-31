@@ -5,7 +5,7 @@ import type { Tables } from "@/integrations/supabase/types";
 
 export type Product = Tables<"products">;
 
-export const CATEGORIES = ["Rank", "Server Setup", "Lobby", "Spawn", "Best Seller"] as const;
+export const CATEGORIES = ["Rank", "Server Setup", "Lobby", "Best Seller"] as const;
 export const BADGES = ["None", "BEST SELLER", "NEW", "DISCOUNT"] as const;
 
 export const formatRupiah = (n: number) => "Rp " + (n ?? 0).toLocaleString("id-ID");

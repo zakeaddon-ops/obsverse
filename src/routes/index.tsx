@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { productsQuery, useProductsRealtime } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
-const FILTERS = ["Semua", "Rank", "Server Setup", "Lobby", "Spawn", "Best Seller"] as const;
+const FILTERS = ["Semua", "Rank", "Server Setup", "Lobby", "Best Seller"] as const;
 
 type Search = { q?: string | undefined; cat?: string | undefined };
 
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
       { title: "obsVerse — Rank & Server Setup Store Minecraft" },
       { name: "description", content: "Rank & Server Setup Premium untuk Server Minecraft Indonesia dengan desain Amethyst eksklusif." },
       { property: "og:title", content: "obsVerse — Rank & Server Setup Store Minecraft" },
-      { property: "og:description", content: "Rank, Server Setup, Lobby & Spawn premium bertema amethyst." },
+      { property: "og:description", content: "Rank, Server Setup & Lobby premium bertema amethyst." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

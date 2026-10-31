@@ -12,7 +12,15 @@ export const Route = createFileRoute("/admin")({
     if (!data.user) throw redirect({ to: "/admin/login" });
     return { user: data.user };
   },
-  head: () => ({ meta: [{ title: "Admin — obsVerse" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [
+    { title: "Admin — obsVerse" },
+    { name: "description", content: "Kelola toko dan katalog Minecraft obsVerse." },
+    { property: "og:title", content: "Admin — obsVerse" },
+    { property: "og:description", content: "Panel pengelola toko Minecraft obsVerse." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+    { name: "robots", content: "noindex" },
+  ] }),
   component: AdminLayout,
 });
 

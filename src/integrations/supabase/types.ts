@@ -14,6 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
+      payment_orders: {
+        Row: {
+          access_hash: string
+          amount: number
+          buyer_name: string
+          buyer_whatsapp: string
+          checkout_url: string | null
+          created_at: string
+          environment: string
+          fulfilled: boolean
+          id: string
+          minecraft_name: string
+          payment_method: string | null
+          product_id: string
+          product_name: string
+          requester_hash: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          access_hash: string
+          amount: number
+          buyer_name: string
+          buyer_whatsapp: string
+          checkout_url?: string | null
+          created_at?: string
+          environment: string
+          fulfilled?: boolean
+          id?: string
+          minecraft_name?: string
+          payment_method?: string | null
+          product_id: string
+          product_name: string
+          requester_hash: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          access_hash?: string
+          amount?: number
+          buyer_name?: string
+          buyer_whatsapp?: string
+          checkout_url?: string | null
+          created_at?: string
+          environment?: string
+          fulfilled?: boolean
+          id?: string
+          minecraft_name?: string
+          payment_method?: string | null
+          product_id?: string
+          product_name?: string
+          requester_hash?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      payment_settings: {
+        Row: {
+          enabled: boolean
+          environment: string
+          id: number
+        }
+        Insert: {
+          enabled?: boolean
+          environment?: string
+          id?: number
+        }
+        Update: {
+          enabled?: boolean
+          environment?: string
+          id?: number
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           badge: string
@@ -114,6 +189,17 @@ export type Database = {
         Returns: boolean
       }
       increment_product_views: { Args: { _id: string }; Returns: undefined }
+      reserve_payment_order: {
+        Args: {
+          _access_hash: string
+          _buyer_name: string
+          _buyer_whatsapp: string
+          _minecraft_name: string
+          _product_id: string
+          _requester_hash: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       app_role: "admin" | "user"

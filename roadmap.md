@@ -10,3 +10,9 @@
 # Login recovery
 - [x] Diagnose login errors and prevent failed requests from leaving the login button stuck.
 - [x] Verify network-error login feedback, password visibility, and authenticated admin access; eliminate initial-render mismatch.
+
+# Automatic payments
+- [ ] Prepare Midtrans QRIS/e-wallet checkout, private order status and verified notifications.
+- [ ] Add admin payment settings and orders without exposing keys.
+- [ ] Test disabled checkout, admin access, payment rules and mobile layout.
+- [ ] Run a real Midtrans test transaction after the user supplies a test key (blocked: account not registered).

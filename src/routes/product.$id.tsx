@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronLeft, ChevronRight, Eye, MessageCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { BackButton } from "@/components/site/BackButton";
+import { PaymentCheckout } from "@/components/site/PaymentCheckout";
 import { Footer, Navbar } from "@/components/site/Navbar";
 import { storeSettingsQuery } from "@/lib/store-settings";
 import { safeWhatsApp } from "@/lib/whatsapp";
@@ -116,6 +117,7 @@ function ProductDetail() {
                 </ul>
               </div>
               <div className="grid gap-3">
+                <PaymentCheckout product={p} />
                 {whatsapp ? <Button variant="hero" size="lg" className="h-12 rounded-xl" asChild>
                   <a href={whatsapp} target="_blank" rel="noreferrer"><MessageCircle /> Beli via WhatsApp</a>
                 </Button> : <Button variant="hero" size="lg" className="h-12 rounded-xl" disabled><MessageCircle /> WhatsApp belum tersedia</Button>}

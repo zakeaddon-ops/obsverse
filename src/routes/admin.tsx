@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Gem, LayoutDashboard, LogOut, Package, Settings } from "lucide-react";
+import { CreditCard, Gem, LayoutDashboard, LogOut, Package, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -28,6 +28,7 @@ const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/products", label: "Products", icon: Package, exact: false },
   { to: "/admin/settings", label: "Settings", icon: Settings, exact: false },
+  { to: "/admin/payments", label: "Pembayaran", icon: CreditCard, exact: false },
 ] as const;
 
 function AdminLayout() {
@@ -48,7 +49,7 @@ function AdminLayout() {
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-primary"><Gem className="h-5 w-5 text-primary-foreground" /></span>
           <span className="font-display text-lg font-bold">obsVerse</span>
         </Link>
-        <nav className="grid grid-cols-4 gap-1 md:flex md:flex-col">
+        <nav className="grid grid-cols-5 gap-1 md:flex md:flex-col">
           {NAV.map((n) => (
             <Link key={n.to} to={n.to} activeOptions={{ exact: n.exact }} className={item} activeProps={{ className: activeCls }}>
               <n.icon className="h-4 w-4" /> {n.label}

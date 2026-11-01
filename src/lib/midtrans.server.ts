@@ -36,7 +36,7 @@ export async function midtransFetch(environment: string, path: string, payload?:
   const response = await fetch(host + path, {
     method: payload ? "POST" : "GET",
     headers: { Authorization: `Basic ${btoa(key + ":")}`, "Content-Type": "application/json", Accept: "application/json" },
-    body: payload ? JSON.stringify(payload) : undefined, signal: AbortSignal.timeout(15_000),
+    body: payload ? JSON.stringify(payload) : null, signal: AbortSignal.timeout(15_000),
   });
   if (!response.ok) throw new Error("Midtrans belum dapat memproses permintaan. Coba lagi nanti.");
   return response.json();

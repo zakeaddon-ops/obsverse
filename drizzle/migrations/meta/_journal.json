@@ -36,6 +36,13 @@
       "when": 1793549916926,
       "tag": "0004_midtrans_payment_preparation",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793580836374,
+      "tag": "0005_order_assistance_and_whatsapp_delivery",
+      "breakpoints": true
     }
   ]
 }

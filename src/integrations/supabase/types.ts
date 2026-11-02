@@ -14,6 +14,86 @@ export type Database = {
   }
   public: {
     Tables: {
+      order_notifications: {
+        Row: {
+          created_at: string
+          delivered_at: string | null
+          error: string | null
+          failed_at: string | null
+          id: string
+          next_attempt_at: string
+          order_id: string
+          provider_id: string | null
+          read_at: string | null
+          sent_at: string | null
+          state: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          delivered_at?: string | null
+          error?: string | null
+          failed_at?: string | null
+          id?: string
+          next_attempt_at?: string
+          order_id: string
+          provider_id?: string | null
+          read_at?: string | null
+          sent_at?: string | null
+          state?: string
+          status: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          delivered_at?: string | null
+          error?: string | null
+          failed_at?: string | null
+          id?: string
+          next_attempt_at?: string
+          order_id?: string
+          provider_id?: string | null
+          read_at?: string | null
+          sent_at?: string | null
+          state?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_notifications_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "payment_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_service_state: {
+        Row: {
+          http_status: number | null
+          id: string
+          message: string | null
+          paused: boolean
+          updated_at: string
+        }
+        Insert: {
+          http_status?: number | null
+          id: string
+          message?: string | null
+          paused?: boolean
+          updated_at?: string
+        }
+        Update: {
+          http_status?: number | null
+          id?: string
+          message?: string | null
+          paused?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payment_orders: {
         Row: {
           access_hash: string
@@ -32,6 +112,7 @@ export type Database = {
           requester_hash: string
           status: string
           updated_at: string
+          whatsapp_notifications: boolean
         }
         Insert: {
           access_hash: string
@@ -50,6 +131,7 @@ export type Database = {
           requester_hash: string
           status?: string
           updated_at?: string
+          whatsapp_notifications?: boolean
         }
         Update: {
           access_hash?: string
@@ -68,6 +150,7 @@ export type Database = {
           requester_hash?: string
           status?: string
           updated_at?: string
+          whatsapp_notifications?: boolean
         }
         Relationships: []
       }
@@ -176,6 +259,66 @@ export type Database = {
         }
         Relationships: []
       }
+      whatsapp_delivery_statuses: {
+        Row: {
+          delivery_id: string
+          errors: Json | null
+          id: string
+          provider_at: string
+          provider_id: string
+          status: string
+        }
+        Insert: {
+          delivery_id: string
+          errors?: Json | null
+          id?: string
+          provider_at: string
+          provider_id: string
+          status: string
+        }
+        Update: {
+          delivery_id?: string
+          errors?: Json | null
+          id?: string
+          provider_at?: string
+          provider_id?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      whatsapp_webhook_events: {
+        Row: {
+          delivery_id: string
+          event: string
+          id: string
+          next_attempt_at: string
+          payload: Json
+          processed_at: string | null
+          processing_error: string | null
+          received_at: string
+        }
+        Insert: {
+          delivery_id: string
+          event: string
+          id?: string
+          next_attempt_at?: string
+          payload: Json
+          processed_at?: string | null
+          processing_error?: string | null
+          received_at?: string
+        }
+        Update: {
+          delivery_id?: string
+          event?: string
+          id?: string
+          next_attempt_at?: string
+          payload?: Json
+          processed_at?: string | null
+          processing_error?: string | null
+          received_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -189,6 +332,11 @@ export type Database = {
         Returns: boolean
       }
       increment_product_views: { Args: { _id: string }; Returns: undefined }
+      process_whatsapp_event: { Args: { _id: string }; Returns: undefined }
+      reconcile_whatsapp_delivery: {
+        Args: { _provider_id: string }
+        Returns: undefined
+      }
       reserve_payment_order: {
         Args: {
           _access_hash: string

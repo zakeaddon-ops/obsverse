@@ -12,6 +12,8 @@
 - [x] Verify network-error login feedback, password visibility, and authenticated admin access; eliminate initial-render mismatch.
 
 # Automatic payments
+- [ ] Add capability-protected AI guidance based on authoritative order status and buyer issue.
+- [ ] Add durable WhatsApp notifications for paid/expired orders and verified delivery callbacks (requires WhatsApp Business connection and approved templates).
 - [ ] Prepare Midtrans QRIS/e-wallet checkout, private order status and verified notifications.
 - [ ] Add admin payment settings and orders without exposing keys.
 - [ ] Test disabled checkout, admin access, payment rules and mobile layout.

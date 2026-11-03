@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequest, setResponseHeader } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { checkoutInput, orderInput } from "./payment-rules";
+import { checkoutInput, orderInput, paymentCanActivate } from "./payment-rules";
 import { normalizeWhatsApp } from "./whatsapp";
 
 export const getPaymentAvailability = createServerFn({ method: "GET" }).handler(async () => {
@@ -11,13 +11,14 @@ export const getPaymentAvailability = createServerFn({ method: "GET" }).handler(
   const { data, error } = await publicPaymentClient().from("payment_settings").select("enabled,environment").eq("id", 1).maybeSingle();
   if (error) throw new Error("Pengaturan pembayaran gagal dimuat.");
   const environment = data?.environment ?? "sandbox";
-  return { enabled: Boolean(data?.enabled && midtransKey(environment)), environment };
+  return { enabled: paymentCanActivate(data?.enabled ?? false, Boolean(midtransKey(environment))), environment };
 });
 
 export const createPayment = createServerFn({ method: "POST" }).inputValidator(input => checkoutInput.parse(input)).handler(async ({ data }) => {
   setResponseHeader("Cache-Control", "no-store");
   const { publicPaymentClient, midtransKey, digest, midtransFetch, safeCheckoutUrl } = await import("./midtrans.server");
-  const { data: config } = await publicPaymentClient().from("payment_settings").select("enabled,environment").eq("id", 1).maybeSingle();
+  const { data: config, error: configError } = await publicPaymentClient().from("payment_settings").select("enabled,environment").eq("id", 1).maybeSingle();
+  if (configError) throw new Error("Pengaturan pembayaran gagal dimuat.");
   if (!config?.enabled || !midtransKey(config.environment)) throw new Error("Pembayaran belum diaktifkan oleh admin.");
   const buyerWhatsApp = normalizeWhatsApp(data.whatsapp).slice(14);
   const request = getRequest();
@@ -32,6 +33,9 @@ export const createPayment = createServerFn({ method: "POST" }).inputValidator(i
   if (error || !id) throw new Error("Pesanan belum dapat dibuat. Periksa produk atau coba beberapa menit lagi.");
   const { data: order } = await supabaseAdmin.from("payment_orders").select("*").eq("id", id).single();
   if (!order) throw new Error("Pesanan tidak ditemukan.");
+  if (order.product_id !== data.productId || order.buyer_name !== data.buyerName || order.buyer_whatsapp !== buyerWhatsApp || order.minecraft_name !== data.minecraftName) {
+    throw new Error("Data berbeda dari pesanan sebelumnya. Buka pesanan dari tab checkout yang sama.");
+  }
   if (order.checkout_url) return { id: order.id, url: safeCheckoutUrl(order.checkout_url, order.environment) };
   if (order.status !== "creating") throw new Error("Pesanan ini tidak dapat dibayar lagi.");
   try {
@@ -50,7 +54,7 @@ export const createPayment = createServerFn({ method: "POST" }).inputValidator(i
     return { id: order.id, url };
   } catch {
     // Keep an uncertain provider transaction intact; do not issue duplicate charges.
-    throw new Error("Pembayaran belum dapat dibuka. Periksa status pesanan sebelum mencoba lagi.");
+    return { id: order.id, url: null };
   }
 });
 

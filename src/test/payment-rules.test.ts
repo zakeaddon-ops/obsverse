@@ -1,7 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { canTransitionPayment, checkoutInput, mapPaymentStatus, validPaymentAmount } from "@/lib/payment-rules";
+import { canTransitionPayment, checkoutInput, mapPaymentStatus, validPaymentAmount, paymentCanActivate } from "@/lib/payment-rules";
 
 describe("Automatic QRIS and e-wallet payments", () => {
+  it("keeps payments disabled until the provider key is available", () => {
+    expect(paymentCanActivate(true, false, 25000)).toBe(false);
+    expect(paymentCanActivate(true, true, 25000)).toBe(true);
+    expect(paymentCanActivate(false, true, 25000)).toBe(false);
+  });
+  it("requires a positive whole-rupiah price", () => {
+    expect(paymentCanActivate(true, true, 0)).toBe(false);
+    expect(paymentCanActivate(true, true, 25000.5)).toBe(false);
+  });
   it("requires provider settlement before confirming payment", () => {
     expect(mapPaymentStatus("pending")).toBe("pending");
     expect(mapPaymentStatus("settlement")).toBe("paid");

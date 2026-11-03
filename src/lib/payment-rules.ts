@@ -12,6 +12,9 @@ export const providerStatus = z.object({
   transaction_status: z.string(), fraud_status: z.string().optional(), payment_type: z.string().optional(),
 });
 export type PaymentStatus = "creating" | "pending" | "paid" | "failed" | "cancelled" | "expired" | "refunded";
+export function paymentCanActivate(enabled: boolean, keyAvailable: boolean, price?: number) {
+  return enabled && keyAvailable && (price === undefined || (Number.isSafeInteger(price) && price > 0));
+}
 export function mapPaymentStatus(status: string, fraud?: string): PaymentStatus {
   if (status === "settlement" || (status === "capture" && fraud === "accept")) return "paid";
   if (status === "refund" || status === "partial_refund") return "refunded";

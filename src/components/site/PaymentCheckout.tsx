@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createPayment, getPaymentAvailability } from "@/lib/payments.functions";
+import { paymentCanActivate } from "@/lib/payment-rules";
 import { formatRupiah, type Product } from "@/lib/products";
 
 export function PaymentCheckout({ product }: { product: Product }) {
@@ -33,7 +34,7 @@ export function PaymentCheckout({ product }: { product: Product }) {
     } catch (e) { setError(e instanceof Error ? e.message : "Pembayaran gagal dibuka."); }
     finally { setBusy(false); }
   };
-  const enabled = availability?.enabled && product.price > 0;
+  const enabled = paymentCanActivate(availability?.enabled ?? false, true, product.price);
   return <Dialog open={open} onOpenChange={setOpen}>
     <DialogTrigger asChild><Button variant="outline" size="lg" className="h-12 rounded-xl" disabled={!enabled}><QrCode />{enabled ? "Bayar QRIS / E-wallet" : isError ? "Pembayaran tidak tersedia" : "QRIS / E-wallet segera tersedia"}</Button></DialogTrigger>
     <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-lg">

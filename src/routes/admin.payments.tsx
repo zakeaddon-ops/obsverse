@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Check, RefreshCw, ShieldCheck, Save } from "lucide-react";
+import { Check, RefreshCw, ShieldCheck, Save, Copy } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -28,11 +28,16 @@ function AdminPayments() {
   const [enabled, setEnabled] = useState<boolean | null>(null);
   const [busy, setBusy] = useState(false);
   const [processing, setProcessing] = useState<string | null>(null);
+  const webhookUrl = "https://obsverse.lovable.app/api/public/midtrans/webhook";
+  const copyWebhook = async () => {
+    try { await navigator.clipboard.writeText(webhookUrl); toast.success("Alamat notifikasi disalin"); }
+    catch { toast.error("Tidak dapat menyalin. Pilih dan salin alamat secara manual."); }
+  };
   const mode = environment ?? (data?.settings.environment === "live" ? "live" : "sandbox");
   const keySet = mode === "live" ? data?.liveKeySet : data?.testKeySet;
   const submit = async (event: React.FormEvent) => {
     event.preventDefault(); setBusy(true);
-    try { await save({ data: { environment: mode, enabled: enabled ?? data?.settings.enabled ?? false } }); await qc.invalidateQueries({ queryKey: ["payment-availability"] }); await refetch(); toast.success("Pengaturan pembayaran disimpan"); }
+    try { await save({ data: { environment: mode, enabled: enabled ?? data?.settings.enabled ?? false } }); await qc.invalidateQueries({ queryKey: ["payment-availability"] }); await refetch(); setEnvironment(null); setEnabled(null); toast.success("Pengaturan pembayaran disimpan"); }
     catch (e) { toast.error(e instanceof Error ? e.message : "Gagal menyimpan"); } finally { setBusy(false); }
   };
   const complete = async (id: string) => {
@@ -46,6 +51,12 @@ function AdminPayments() {
         <h2 className="flex items-center gap-2 font-bold"><ShieldCheck className="text-primary-glow" />Midtrans · QRIS & E-wallet</h2>
         <div className="space-y-2"><Label>Lingkungan pembayaran</Label><Select value={mode} onValueChange={value => { setEnvironment(value === "live" ? "live" : "sandbox"); setEnabled(false); }}><SelectTrigger aria-label="Lingkungan pembayaran"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="sandbox">Uji — tanpa uang asli</SelectItem><SelectItem value="live">Live — uang asli</SelectItem></SelectContent></Select></div>
         <p role="status" className="text-sm text-muted-foreground">{keySet ? "Server Key sudah tersimpan aman." : "Server Key belum tersimpan. Pembayaran belum bisa diaktifkan."}</p>
+        <dl className="space-y-3 text-sm">
+          <div><dt className="font-semibold">Key yang diperlukan</dt><dd className="mt-1 break-all text-muted-foreground">{mode === "live" ? "MIDTRANS_LIVE_SERVER_KEY" : "MIDTRANS_SANDBOX_SERVER_KEY"}</dd></div>
+          <div><dt className="font-semibold">Penyimpanan key</dt><dd className="mt-1 text-muted-foreground">Setelah mendaftar Midtrans, simpan Server Key melalui formulir rahasia Lovable. Jangan masukkan key ke chat atau data produk.</dd></div>
+          <div><dt className="font-semibold">Alamat notifikasi Midtrans</dt><dd className="mt-1 flex items-start gap-2"><code className="min-w-0 flex-1 select-all break-all text-xs text-muted-foreground">{webhookUrl}</code><Button type="button" variant="ghost" size="icon" aria-label="Salin alamat notifikasi" title="Salin alamat notifikasi" onClick={copyWebhook}><Copy /></Button></dd></div>
+        </dl>
+        <p className="text-sm text-muted-foreground">Pasang alamat ini sebagai Payment Notification URL di Midtrans setelah website diterbitkan. Mulai dengan mode uji sebelum mengaktifkan uang asli.</p>
         <div className="flex items-center justify-between gap-4"><Label htmlFor="payment-enabled">Aktifkan pembayaran</Label><Switch id="payment-enabled" checked={enabled ?? data.settings.enabled} onCheckedChange={setEnabled} disabled={!keySet} /></div>
         <Button type="submit" variant="hero" disabled={busy}><Save />Simpan pengaturan</Button>
       </form>

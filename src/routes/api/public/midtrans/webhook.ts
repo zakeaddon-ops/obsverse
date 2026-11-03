@@ -14,7 +14,7 @@ export const Route = createFileRoute("/api/public/midtrans/webhook")({ server: {
     // Authenticate with either configured environment key before privileged reads.
     let environment: string | undefined;
     for (const mode of ["sandbox", "live"]) {
-      const key = midtransKey(mode);
+      const key = await midtransKey(mode);
       if (key && equalDigest(await digest(notification.order_id + notification.status_code + notification.gross_amount + key, "SHA-512"), notification.signature_key)) environment = mode;
     }
     if (!environment) return new Response("Unauthorized", { status: 401 });

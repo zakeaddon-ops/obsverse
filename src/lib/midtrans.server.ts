@@ -16,8 +16,9 @@ export function publicPaymentClient() {
     },
   } });
 }
-export function midtransKey(environment: string) {
-  return environment === "live" ? process.env["MIDTRANS_LIVE_SERVER_KEY"] : process.env["MIDTRANS_SANDBOX_SERVER_KEY"];
+export async function midtransKey(environment: string) {
+  const { storedPaymentKey } = await import("./payment-credentials.server");
+  return await storedPaymentKey(environment) ?? (environment === "live" ? process.env["MIDTRANS_LIVE_SERVER_KEY"] : process.env["MIDTRANS_SANDBOX_SERVER_KEY"]);
 }
 export async function digest(value: string, algorithm = "SHA-256") {
   const bytes = await crypto.subtle.digest(algorithm, new TextEncoder().encode(value));
@@ -30,7 +31,7 @@ export function equalDigest(a: string, b: string) {
   return difference === 0;
 }
 export async function midtransFetch(environment: string, path: string, payload?: unknown) {
-  const key = midtransKey(environment);
+  const key = await midtransKey(environment);
   if (!key) throw new Error("Pembayaran belum diaktifkan oleh admin.");
   const host = payload ? (environment === "live" ? "https://app.midtrans.com" : "https://app.sandbox.midtrans.com") : (environment === "live" ? "https://api.midtrans.com" : "https://api.sandbox.midtrans.com");
   const response = await fetch(host + path, {

@@ -94,6 +94,24 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_credentials: {
+        Row: {
+          encrypted_key: string
+          environment: string
+          updated_at: string
+        }
+        Insert: {
+          encrypted_key: string
+          environment: string
+          updated_at?: string
+        }
+        Update: {
+          encrypted_key?: string
+          environment?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payment_orders: {
         Row: {
           access_hash: string
@@ -226,6 +244,21 @@ export type Database = {
         }
         Relationships: []
       }
+      store_owners: {
+        Row: {
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       store_settings: {
         Row: {
           id: number
@@ -332,6 +365,7 @@ export type Database = {
         Returns: boolean
       }
       increment_product_views: { Args: { _id: string }; Returns: undefined }
+      is_store_owner: { Args: never; Returns: boolean }
       process_whatsapp_event: { Args: { _id: string }; Returns: undefined }
       reconcile_whatsapp_delivery: {
         Args: { _provider_id: string }

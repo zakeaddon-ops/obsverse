@@ -4,6 +4,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { checkoutInput, orderInput, paymentCanActivate } from "./payment-rules";
 import { normalizeWhatsApp } from "./whatsapp";
+import { requireOwnerMembership } from "./owner-rules";
 
 export const getPaymentAvailability = createServerFn({ method: "GET" }).handler(async () => {
   setResponseHeader("Cache-Control", "no-store");
@@ -11,7 +12,7 @@ export const getPaymentAvailability = createServerFn({ method: "GET" }).handler(
   const { data, error } = await publicPaymentClient().from("payment_settings").select("enabled,environment").eq("id", 1).maybeSingle();
   if (error) throw new Error("Pengaturan pembayaran gagal dimuat.");
   const environment = data?.environment ?? "sandbox";
-  return { enabled: paymentCanActivate(data?.enabled ?? false, Boolean(midtransKey(environment))), environment };
+  return { enabled: paymentCanActivate(data?.enabled ?? false, Boolean(await midtransKey(environment))), environment };
 });
 
 export const createPayment = createServerFn({ method: "POST" }).inputValidator(input => checkoutInput.parse(input)).handler(async ({ data }) => {
@@ -19,12 +20,12 @@ export const createPayment = createServerFn({ method: "POST" }).inputValidator(i
   const { publicPaymentClient, midtransKey, digest, midtransFetch, safeCheckoutUrl } = await import("./midtrans.server");
   const { data: config, error: configError } = await publicPaymentClient().from("payment_settings").select("enabled,environment").eq("id", 1).maybeSingle();
   if (configError) throw new Error("Pengaturan pembayaran gagal dimuat.");
-  if (!config?.enabled || !midtransKey(config.environment)) throw new Error("Pembayaran belum diaktifkan oleh admin.");
+  if (!config?.enabled || !await midtransKey(config.environment)) throw new Error("Pembayaran belum diaktifkan oleh owner.");
   const buyerWhatsApp = normalizeWhatsApp(data.whatsapp).slice(14);
   const request = getRequest();
   const ip = request.headers.get("cf-connecting-ip") ?? "local";
   const accessHash = await digest(data.token);
-  const requesterHash = await digest(ip + ":" + midtransKey(config.environment));
+  const requesterHash = await digest(ip + ":" + await midtransKey(config.environment));
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data: id, error } = await supabaseAdmin.rpc("reserve_payment_order", {
     _access_hash: accessHash, _requester_hash: requesterHash, _product_id: data.productId,
@@ -65,7 +66,7 @@ export const getPaymentOrder = createServerFn({ method: "POST" }).inputValidator
   const { data: order } = await supabaseAdmin.from("payment_orders").select("*").eq("id", data.id).eq("access_hash", await digest(data.token)).maybeSingle();
   if (!order) throw new Error("Pesanan tidak ditemukan atau akses tidak valid.");
   let verificationPending = false;
-  if (midtransKey(order.environment) && Date.now() - Date.parse(order.updated_at) > 15_000 && ["creating", "pending"].includes(order.status)) {
+  if (await midtransKey(order.environment) && Date.now() - Date.parse(order.updated_at) > 15_000 && ["creating", "pending"].includes(order.status)) {
     try { await syncPaymentOrder(order); } catch { verificationPending = true; }
   }
   const { data: latest } = await supabaseAdmin.from("payment_orders").select("*").eq("id", order.id).single();
@@ -79,20 +80,21 @@ export const getAdminPayments = createServerFn({ method: "POST" }).middleware([r
   const { data: admin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
   if (!admin) throw new Error("Hanya admin yang dapat mengelola pembayaran.");
   const { midtransKey } = await import("./midtrans.server");
+  const { data: owner } = await context.supabase.rpc("is_store_owner");
   const { data: settings, error } = await context.supabase.from("payment_settings").select("*").eq("id", 1).maybeSingle();
   const { data: orders, error: ordersError } = await context.supabase.from("payment_orders").select("id,product_name,amount,buyer_name,buyer_whatsapp,minecraft_name,status,environment,fulfilled,created_at").order("created_at", { ascending: false }).limit(100);
   if (error || ordersError) throw new Error("Pembayaran gagal dimuat.");
   return { settings: settings ?? { id: 1, enabled: false, environment: "sandbox" }, orders: orders ?? [],
-    testKeySet: Boolean(midtransKey("sandbox")), liveKeySet: Boolean(midtransKey("live")) };
+    isOwner: owner === true, testKeySet: Boolean(await midtransKey("sandbox")), liveKeySet: Boolean(await midtransKey("live")) };
 });
 
 export const savePaymentSettings = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
   .inputValidator(input => z.object({ enabled: z.boolean(), environment: z.enum(["sandbox", "live"]) }).parse(input))
   .handler(async ({ data, context }) => {
-    const { data: admin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
-    if (!admin) throw new Error("Hanya admin yang dapat mengelola pembayaran.");
+    const { data: owner, error: roleError } = await context.supabase.rpc("is_store_owner");
+    requireOwnerMembership(!roleError && owner === true);
     const { midtransKey } = await import("./midtrans.server");
-    if (data.enabled && !midtransKey(data.environment)) throw new Error("Simpan Server Key dengan aman di Lovable sebelum mengaktifkan pembayaran.");
+    if (data.enabled && !await midtransKey(data.environment)) throw new Error("Simpan Server Key sebelum mengaktifkan pembayaran.");
     const { error } = await context.supabase.from("payment_settings").upsert({ id: 1, ...data });
     if (error) throw new Error("Pengaturan gagal disimpan.");
     return { ok: true };

@@ -43,6 +43,13 @@
       "when": 1793580836374,
       "tag": "0005_order_assistance_and_whatsapp_delivery",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793686600604,
+      "tag": "0006_owner_payment_credentials",
+      "breakpoints": true
     }
   ]
 }

@@ -58,8 +58,7 @@ function Login() {
           <span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary shadow-button">
             <Gem className="h-6 w-6 text-primary-foreground" />
           </span>
-          <h1 className="mt-4 text-2xl font-bold">obsVerse Admin</h1>
-          <p className="text-sm text-muted-foreground">Masuk untuk mengelola produk</p>
+          <h1 className="mt-4 text-2xl font-bold">obsVerse Admin & Owner</h1>
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>

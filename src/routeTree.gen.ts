@@ -21,6 +21,7 @@ import { Route as AdminProductsIndexRouteImport } from './routes/admin.products.
 import { Route as AdminProductsNewRouteImport } from './routes/admin.products.new'
 import { Route as AdminProductsIdEditRouteImport } from './routes/admin.products.$id.edit'
 import { Route as ApiPublicMidtransWebhookRouteImport } from './routes/api/public/midtrans/webhook'
+import { Route as ApiPublicWhatsappWebhookRouteImport } from './routes/api/public/whatsapp/webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -83,6 +84,12 @@ const ApiPublicMidtransWebhookRoute =
     path: '/api/public/midtrans/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicWhatsappWebhookRoute =
+  ApiPublicWhatsappWebhookRouteImport.update({
+    id: '/api/public/whatsapp/webhook',
+    path: '/api/public/whatsapp/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -97,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
   '/api/public/midtrans/webhook': typeof ApiPublicMidtransWebhookRoute
+  '/api/public/whatsapp/webhook': typeof ApiPublicWhatsappWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -110,6 +118,7 @@ export interface FileRoutesByTo {
   '/admin/products': typeof AdminProductsIndexRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
   '/api/public/midtrans/webhook': typeof ApiPublicMidtransWebhookRoute
+  '/api/public/whatsapp/webhook': typeof ApiPublicWhatsappWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -125,6 +134,7 @@ export interface FileRoutesById {
   '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
   '/api/public/midtrans/webhook': typeof ApiPublicMidtransWebhookRoute
+  '/api/public/whatsapp/webhook': typeof ApiPublicWhatsappWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/admin/products/'
     | '/admin/products/$id/edit'
     | '/api/public/midtrans/webhook'
+    | '/api/public/whatsapp/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/admin/products'
     | '/admin/products/$id/edit'
     | '/api/public/midtrans/webhook'
+    | '/api/public/whatsapp/webhook'
   id:
     | '__root__'
     | '/'
@@ -168,6 +180,7 @@ export interface FileRouteTypes {
     | '/admin/products/'
     | '/admin/products/$id/edit'
     | '/api/public/midtrans/webhook'
+    | '/api/public/whatsapp/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -177,6 +190,7 @@ export interface RootRouteChildren {
   PaymentIdRoute: typeof PaymentIdRoute
   ProductIdRoute: typeof ProductIdRoute
   ApiPublicMidtransWebhookRoute: typeof ApiPublicMidtransWebhookRoute
+  ApiPublicWhatsappWebhookRoute: typeof ApiPublicWhatsappWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -265,6 +279,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMidtransWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/whatsapp/webhook': {
+      id: '/api/public/whatsapp/webhook'
+      path: '/api/public/whatsapp/webhook'
+      fullPath: '/api/public/whatsapp/webhook'
+      preLoaderRoute: typeof ApiPublicWhatsappWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -295,6 +316,7 @@ const rootRouteChildren: RootRouteChildren = {
   PaymentIdRoute: PaymentIdRoute,
   ProductIdRoute: ProductIdRoute,
   ApiPublicMidtransWebhookRoute: ApiPublicMidtransWebhookRoute,
+  ApiPublicWhatsappWebhookRoute: ApiPublicWhatsappWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

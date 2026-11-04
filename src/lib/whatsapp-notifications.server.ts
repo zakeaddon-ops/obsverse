@@ -10,7 +10,7 @@ async function gateway(path: string, body?: unknown) {
   const response = await fetch(GATEWAY_URL + path, {
     method: body ? "POST" : "GET",
     headers: { Authorization: `Bearer ${appKey}`, "X-Connection-Api-Key": connectionKey, "Content-Type": "application/json" },
-    body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(3000),
+    body: body ? JSON.stringify(body) : null, signal: AbortSignal.timeout(3000),
   });
   if (!response.ok) {
     const error = await response.text();

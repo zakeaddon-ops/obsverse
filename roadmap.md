@@ -12,9 +12,9 @@
 - [x] Verify network-error login feedback, password visibility, and authenticated admin access; eliminate initial-render mismatch.
 
 # Automatic payments
-- [ ] Add owner-only encrypted Midtrans key entry and configuration; provision the requested owner account and verify access boundaries.
+- [ ] Complete owner-only encrypted Midtrans key entry, provision the requested owner account, and verify access boundaries.
 - [x] Cancel AI guidance at the user's request; do not implement AI assistance.
-- [ ] Activate WhatsApp notifications after the payment setup (blocked: approved templates and deployed, verified callback receiver are not available yet).
+- [ ] Complete WhatsApp sending, signed durable receiver, buyer consent and recovery; activation requires renewed WhatsApp access and a deployed verified receiver.
 - [x] Prepare Midtrans QRIS/e-wallet checkout, private order status and signature-checked payment notifications.
 - [x] Add admin payment settings and orders without exposing keys; show key names and notification address.
 - [x] Test disabled activation, authenticated settings saving/readback, payment rules, unsigned callback rejection and mobile layout.

@@ -70,7 +70,7 @@ function AdminPayments() {
         </form>
         <dl className="space-y-3 text-sm">
           <div><dt className="font-semibold">Ambil API Key</dt><dd className="mt-1 text-muted-foreground">Login NexaPayz → menu Profil → salin API Key.</dd></div>
-          <div><dt className="font-semibold">Alamat notifikasi Midtrans</dt><dd className="mt-1 flex items-start gap-2"><code className="min-w-0 flex-1 select-all break-all text-xs text-muted-foreground">{webhookUrl}</code><Button type="button" variant="ghost" size="icon" aria-label="Salin alamat notifikasi" title="Salin alamat notifikasi" onClick={copyWebhook}><Copy /></Button></dd></div>
+          <div><dt className="font-semibold">Alamat webhook NexaPayz</dt><dd className="mt-1 flex items-start gap-2"><code className="min-w-0 flex-1 select-all break-all text-xs text-muted-foreground">{webhookUrl}</code><Button type="button" variant="ghost" size="icon" aria-label="Salin alamat notifikasi" title="Salin alamat notifikasi" onClick={copyWebhook}><Copy /></Button></dd></div>
         </dl>
         <p className="text-sm text-muted-foreground">Pasang alamat ini di NexaPayz → Profil → Atur Webhook setelah website diterbitkan. NexaPayz tidak punya mode uji: setiap pembayaran memakai uang asli.</p>
         <form onSubmit={submit} className="space-y-4">

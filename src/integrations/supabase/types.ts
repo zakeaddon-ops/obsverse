@@ -127,6 +127,7 @@ export type Database = {
           payment_method: string | null
           product_id: string
           product_name: string
+          provider_invoice_id: string | null
           requester_hash: string
           status: string
           updated_at: string
@@ -146,6 +147,7 @@ export type Database = {
           payment_method?: string | null
           product_id: string
           product_name: string
+          provider_invoice_id?: string | null
           requester_hash: string
           status?: string
           updated_at?: string
@@ -165,6 +167,7 @@ export type Database = {
           payment_method?: string | null
           product_id?: string
           product_name?: string
+          provider_invoice_id?: string | null
           requester_hash?: string
           status?: string
           updated_at?: string

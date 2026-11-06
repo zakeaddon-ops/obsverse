@@ -38,7 +38,7 @@ function PaymentPage() {
         {order.status === "expired" && <p className="text-sm text-muted-foreground">Waktu pembayaran telah habis. Jangan bayar kode dari pesanan ini.</p>}
         {["failed", "cancelled"].includes(order.status) && <p className="text-sm text-muted-foreground">Pembayaran tidak selesai. Periksa riwayat transaksi sebelum mencoba pesanan baru.</p>}
         {order.verificationPending && <p role="status" className="text-sm text-muted-foreground">Verifikasi sementara belum tersedia. Coba periksa lagi.</p>}
-        {order.checkoutUrl && order.status === "pending" && <Button variant="hero" asChild><a href={order.checkoutUrl} rel="noopener noreferrer"><ExternalLink />Buka pembayaran Midtrans</a></Button>}
+        {order.checkoutUrl && order.status === "pending" && <Button variant="hero" asChild><a href={order.checkoutUrl} rel="noopener noreferrer"><ExternalLink />Bayar dengan QRIS</a></Button>}
       </section>
       <Button variant="outline" onClick={() => refetch()} disabled={isFetching}><RefreshCw className={isFetching ? "animate-spin" : ""} />Periksa status</Button>
     </div>}

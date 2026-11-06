@@ -7,24 +7,15 @@ export const checkoutInput = z.object({
   minecraftName: z.string().trim().min(3).max(16).regex(/^[A-Za-z0-9_]+$/),
 });
 export const orderInput = z.object({ id: z.string().uuid(), token: z.string().uuid() });
-export const providerStatus = z.object({
-  order_id: z.string().uuid(), gross_amount: z.string().regex(/^\d+(\.\d{1,2})?$/),
-  transaction_status: z.string(), fraud_status: z.string().optional(), payment_type: z.string().optional(),
-});
+export const NEXAPAYZ_HOST = "nexapayz.alluffystore.my.id";
 export type PaymentStatus = "creating" | "pending" | "paid" | "failed" | "cancelled" | "expired" | "refunded";
 export function paymentCanActivate(enabled: boolean, keyAvailable: boolean, price?: number) {
   return enabled && keyAvailable && (price === undefined || (Number.isSafeInteger(price) && price > 0));
 }
-export function mapPaymentStatus(status: string, fraud?: string): PaymentStatus {
-  if (status === "settlement" || (status === "capture" && fraud === "accept")) return "paid";
-  if (status === "refund" || status === "partial_refund") return "refunded";
-  if (status === "deny" || fraud === "deny" || status === "failure") return "failed";
-  if (status === "expire") return "expired";
-  if (status === "cancel") return "cancelled";
+export function mapPaymentStatus(status: string): PaymentStatus {
+  if (status === "paid") return "paid";
+  if (status === "expired") return "expired";
   return "pending";
-}
-export function validPaymentAmount(expected: number, actual: string) {
-  return Number.isSafeInteger(expected) && expected > 0 && Number(actual) === expected;
 }
 export function canTransitionPayment(current: string, next: PaymentStatus) {
   if (current === "refunded") return next === "refunded";

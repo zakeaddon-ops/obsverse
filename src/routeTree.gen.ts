@@ -20,7 +20,7 @@ import { Route as ProductIdRouteImport } from './routes/product.$id'
 import { Route as AdminProductsIndexRouteImport } from './routes/admin.products.index'
 import { Route as AdminProductsNewRouteImport } from './routes/admin.products.new'
 import { Route as AdminProductsIdEditRouteImport } from './routes/admin.products.$id.edit'
-import { Route as ApiPublicMidtransWebhookRouteImport } from './routes/api/public/midtrans/webhook'
+import { Route as ApiPublicNexapayzWebhookRouteImport } from './routes/api/public/nexapayz/webhook'
 import { Route as ApiPublicWhatsappWebhookRouteImport } from './routes/api/public/whatsapp/webhook'
 
 const IndexRoute = IndexRouteImport.update({
@@ -78,10 +78,10 @@ const AdminProductsIdEditRoute = AdminProductsIdEditRouteImport.update({
   path: '/products/$id/edit',
   getParentRoute: () => AdminRoute,
 } as any)
-const ApiPublicMidtransWebhookRoute =
-  ApiPublicMidtransWebhookRouteImport.update({
-    id: '/api/public/midtrans/webhook',
-    path: '/api/public/midtrans/webhook',
+const ApiPublicNexapayzWebhookRoute =
+  ApiPublicNexapayzWebhookRouteImport.update({
+    id: '/api/public/nexapayz/webhook',
+    path: '/api/public/nexapayz/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicWhatsappWebhookRoute =
@@ -103,7 +103,7 @@ export interface FileRoutesByFullPath {
   '/admin/products/new': typeof AdminProductsNewRoute
   '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
-  '/api/public/midtrans/webhook': typeof ApiPublicMidtransWebhookRoute
+  '/api/public/nexapayz/webhook': typeof ApiPublicNexapayzWebhookRoute
   '/api/public/whatsapp/webhook': typeof ApiPublicWhatsappWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -117,7 +117,7 @@ export interface FileRoutesByTo {
   '/admin/products/new': typeof AdminProductsNewRoute
   '/admin/products': typeof AdminProductsIndexRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
-  '/api/public/midtrans/webhook': typeof ApiPublicMidtransWebhookRoute
+  '/api/public/nexapayz/webhook': typeof ApiPublicNexapayzWebhookRoute
   '/api/public/whatsapp/webhook': typeof ApiPublicWhatsappWebhookRoute
 }
 export interface FileRoutesById {
@@ -133,7 +133,7 @@ export interface FileRoutesById {
   '/admin/products/new': typeof AdminProductsNewRoute
   '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/products/$id/edit': typeof AdminProductsIdEditRoute
-  '/api/public/midtrans/webhook': typeof ApiPublicMidtransWebhookRoute
+  '/api/public/nexapayz/webhook': typeof ApiPublicNexapayzWebhookRoute
   '/api/public/whatsapp/webhook': typeof ApiPublicWhatsappWebhookRoute
 }
 export interface FileRouteTypes {
@@ -150,7 +150,7 @@ export interface FileRouteTypes {
     | '/admin/products/new'
     | '/admin/products/'
     | '/admin/products/$id/edit'
-    | '/api/public/midtrans/webhook'
+    | '/api/public/nexapayz/webhook'
     | '/api/public/whatsapp/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -164,7 +164,7 @@ export interface FileRouteTypes {
     | '/admin/products/new'
     | '/admin/products'
     | '/admin/products/$id/edit'
-    | '/api/public/midtrans/webhook'
+    | '/api/public/nexapayz/webhook'
     | '/api/public/whatsapp/webhook'
   id:
     | '__root__'
@@ -179,7 +179,7 @@ export interface FileRouteTypes {
     | '/admin/products/new'
     | '/admin/products/'
     | '/admin/products/$id/edit'
-    | '/api/public/midtrans/webhook'
+    | '/api/public/nexapayz/webhook'
     | '/api/public/whatsapp/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -189,7 +189,7 @@ export interface RootRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
   PaymentIdRoute: typeof PaymentIdRoute
   ProductIdRoute: typeof ProductIdRoute
-  ApiPublicMidtransWebhookRoute: typeof ApiPublicMidtransWebhookRoute
+  ApiPublicNexapayzWebhookRoute: typeof ApiPublicNexapayzWebhookRoute
   ApiPublicWhatsappWebhookRoute: typeof ApiPublicWhatsappWebhookRoute
 }
 
@@ -272,11 +272,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsIdEditRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/api/public/midtrans/webhook': {
-      id: '/api/public/midtrans/webhook'
-      path: '/api/public/midtrans/webhook'
-      fullPath: '/api/public/midtrans/webhook'
-      preLoaderRoute: typeof ApiPublicMidtransWebhookRouteImport
+    '/api/public/nexapayz/webhook': {
+      id: '/api/public/nexapayz/webhook'
+      path: '/api/public/nexapayz/webhook'
+      fullPath: '/api/public/nexapayz/webhook'
+      preLoaderRoute: typeof ApiPublicNexapayzWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/whatsapp/webhook': {
@@ -315,7 +315,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   PaymentIdRoute: PaymentIdRoute,
   ProductIdRoute: ProductIdRoute,
-  ApiPublicMidtransWebhookRoute: ApiPublicMidtransWebhookRoute,
+  ApiPublicNexapayzWebhookRoute: ApiPublicNexapayzWebhookRoute,
   ApiPublicWhatsappWebhookRoute: ApiPublicWhatsappWebhookRoute,
 }
 export const routeTree = rootRouteImport

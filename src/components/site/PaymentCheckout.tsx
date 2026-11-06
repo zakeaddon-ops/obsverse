@@ -36,7 +36,7 @@ export function PaymentCheckout({ product }: { product: Product }) {
   };
   const enabled = paymentCanActivate(availability?.enabled ?? false, true, product.price);
   return <Dialog open={open} onOpenChange={setOpen}>
-    <DialogTrigger asChild><Button variant="outline" size="lg" className="h-12 rounded-xl" disabled={!enabled}><QrCode />{enabled ? "Bayar QRIS / E-wallet" : isError ? "Pembayaran tidak tersedia" : "QRIS / E-wallet segera tersedia"}</Button></DialogTrigger>
+    <DialogTrigger asChild><Button variant="outline" size="lg" className="h-12 rounded-xl" disabled={!enabled}><QrCode />{enabled ? "Bayar QRIS" : isError ? "Pembayaran tidak tersedia" : "QRIS / E-wallet segera tersedia"}</Button></DialogTrigger>
     <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-lg">
       <DialogHeader><DialogTitle>Bayar pesanan</DialogTitle><DialogDescription>{product.name} · {formatRupiah(product.price)}</DialogDescription></DialogHeader>
       {availability?.environment === "sandbox" && <p role="status" className="text-sm text-primary-glow">Mode uji — tanpa uang asli</p>}

@@ -16,6 +16,7 @@ export function Navbar() {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
   const [q, setQ] = useState(search.q ?? "");
+  const [searchOpen, setSearchOpen] = useState(false);
   useEffect(() => setQ(search.q ?? ""), [search.q]);
 
   const submit = (value: string) =>
@@ -23,17 +24,23 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-md">
-      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 px-4 py-3 sm:grid-cols-[auto_minmax(0,1fr)_auto_auto] sm:gap-4">
+      <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-1 px-4 py-3 sm:px-6">
         <Link to="/" className="flex shrink-0 items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-primary shadow-button">
+          <span className="grid h-9 w-9 place-items-center rounded-md bg-primary shadow-button">
             <Gem className="h-5 w-5 text-primary-foreground" />
           </span>
           <span className="font-display text-xl font-bold">
             obs<span className="text-gradient">Verse</span>
           </span>
         </Link>
+        <div className="ml-auto flex items-center gap-1">
+          <Button variant="ghost" size="icon" aria-label="Buka pencarian" title="Cari produk" aria-expanded={searchOpen} onClick={() => setSearchOpen(!searchOpen)}><Search className="h-4 w-4" /></Button>
+          <Button variant="ghost" size="icon" asChild><Link to="/admin" aria-label="Admin" title="Admin"><Shield className="h-4 w-4" /></Link></Button>
+          {whatsapp ? <Button variant="ghost" size="icon" asChild><a href={whatsapp} aria-label="WhatsApp" title="WhatsApp" target="_blank" rel="noreferrer"><MessageCircle className="h-4 w-4" /></a></Button> : <Button variant="ghost" size="icon" disabled aria-label="WhatsApp belum tersedia" title="WhatsApp belum tersedia"><MessageCircle className="h-4 w-4" /></Button>}
+        </div>
+        {searchOpen &&
         <form
-          className="relative col-span-3 row-start-2 min-w-0 sm:col-span-1 sm:col-start-2 sm:row-start-1"
+          className="relative mt-2 w-full min-w-0"
           onSubmit={(e) => {
             e.preventDefault();
             if (timer.current) clearTimeout(timer.current);
@@ -55,19 +62,7 @@ export function Navbar() {
             className="h-10 w-full rounded-lg border border-border bg-card pl-10 pr-10 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
           />
           {q && <Button type="button" variant="ghost" size="icon" aria-label="Hapus pencarian" className="absolute right-1 top-0.5 h-9 w-9" onClick={() => { if (timer.current) clearTimeout(timer.current); setQ(""); submit(""); }}><X /></Button>}
-        </form>
-        <Button variant="outline" className="shrink-0 rounded-lg" asChild>
-          <Link to="/admin" aria-label="Admin" title="Admin">
-            <Shield />
-            <span className="hidden sm:inline">Admin</span>
-          </Link>
-        </Button>
-        {whatsapp ? <Button variant="hero" className="shrink-0 rounded-lg" asChild>
-          <a href={whatsapp} aria-label="WhatsApp" title="WhatsApp" target="_blank" rel="noreferrer">
-            <MessageCircle />
-            <span className="hidden sm:inline">WhatsApp</span>
-          </a>
-        </Button> : <Button variant="hero" className="shrink-0 rounded-lg" disabled aria-label="WhatsApp belum tersedia" title="WhatsApp belum tersedia"><MessageCircle /><span className="hidden sm:inline">WhatsApp</span></Button>}
+        </form>}
       </div>
     </header>
   );
@@ -76,7 +71,7 @@ export function Navbar() {
 export function Footer() {
   return (
     <footer className="mt-16 border-t border-border px-4 py-8 text-sm text-muted-foreground">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4">
+      <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-4 sm:px-2">
         <Gem className="h-4 w-4 text-primary-glow" />
         <span className="mr-auto font-display font-semibold text-foreground">obsVerse</span>
         <span>© 2026 · Minecraft Store</span>

@@ -32,7 +32,7 @@ export function ProductCard({ p }: { p: Product }) {
           <Eye className="h-3 w-3" /> {p.views}
         </span>
       </div>
-      <div className="flex flex-1 flex-col gap-3 p-5">
+      <div className="flex flex-1 flex-col gap-3 p-4">
         <span className="text-xs font-medium uppercase tracking-wider text-primary-glow">{p.category}</span>
         <h3 className="text-lg font-bold leading-tight">{p.name}</h3>
         <p className="line-clamp-2 text-sm text-muted-foreground">{p.short_desc}</p>
@@ -43,9 +43,9 @@ export function ProductCard({ p }: { p: Product }) {
             </span>
           ))}
         </div>
-        <div className="mt-auto grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 pt-2">
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3">
           <span className="min-w-0 break-words font-display text-lg font-bold text-glow">{formatRupiah(p.price)}</span>
-          <Button variant="hero" size="sm" className="rounded-full" asChild>
+          <Button variant="hero" size="sm" className="rounded-md" asChild>
             <Link to="/product/$id" params={{ id: p.id }}>Lihat Detail <ArrowUpRight /></Link>
           </Button>
         </div>

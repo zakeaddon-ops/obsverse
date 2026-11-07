@@ -89,6 +89,7 @@
 
   --gradient-primary: linear-gradient(135deg, var(--primary-glow), var(--primary) 50%, var(--primary-deep));
   --gradient-hero-overlay: linear-gradient(180deg, color-mix(in oklab, var(--background) 35%, transparent) 0%, color-mix(in oklab, var(--background) 65%, transparent) 60%, var(--background) 100%);
+  --gradient-store-cover: linear-gradient(90deg, color-mix(in oklab, var(--background) 92%, transparent), color-mix(in oklab, var(--background) 65%, transparent) 50%, color-mix(in oklab, var(--background) 12%, transparent));
   --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--primary-glow) 45%, transparent), 0 20px 50px -15px color-mix(in oklab, var(--primary) 60%, transparent);
   --shadow-button: 0 8px 24px -8px color-mix(in oklab, var(--primary) 70%, transparent);
 }
@@ -115,6 +116,9 @@
 }
 @utility bg-hero-overlay {
   background-image: var(--gradient-hero-overlay);
+}
+@utility bg-store-cover {
+  background-image: var(--gradient-store-cover);
 }
 @utility shadow-glow {
   box-shadow: var(--shadow-glow);

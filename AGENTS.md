@@ -16,6 +16,7 @@
 
 
 - Store navigation feedback lives in the root layout, and the shared navbar debounces search updates. Why: avoid per-keystroke navigation churn while keeping page transitions visible.
+- Store presentation stays in shared site components and the index route; reference-site styling must not alter catalog or checkout logic. Why: visual redesigns preserve existing store operations.
 - Store contact uses a shared settings query and WhatsApp normalization helper, with product-specific contact taking precedence. Why: admin changes must reach every contact surface without unsafe or fabricated destinations.
 - Private WhatsApp chat is a shared public-store dialog using the store contact query; it only prepares an encoded wa.me message, never sends or stores it. Why: visitors converse directly with the admin in WhatsApp without exposing workspace messaging credentials.
 - NexaPayz checkout uses server-priced orders, tab-scoped random access capabilities, an owner-stored API key and unsigned webhooks treated only as hints with authoritative invoice status lookup; only admins read buyer details and mark paid orders delivered. Why: prevent price tampering, order disclosure, fake payment confirmation and accidental live charging.

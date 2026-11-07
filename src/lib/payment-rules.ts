@@ -23,6 +23,16 @@ export function canTransitionPayment(current: string, next: PaymentStatus) {
   if (next === "pending") return current === "creating" || current === "pending";
   return true;
 }
+export const PAYMENT_WINDOW_MS = 15 * 60_000;
+export function paymentSecondsLeft(createdAt: string, now: number) {
+  const elapsed = now - Date.parse(createdAt);
+  return Math.max(0, Math.ceil((PAYMENT_WINDOW_MS - elapsed) / 1000));
+}
+export function formatCountdown(seconds: number) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
 export const PAYMENT_LABELS: Record<string, string> = {
   creating: "Menyiapkan pembayaran", pending: "Menunggu pembayaran", paid: "Sudah dibayar",
   failed: "Pembayaran gagal", cancelled: "Dibatalkan", expired: "Kedaluwarsa", refunded: "Pengembalian dana",

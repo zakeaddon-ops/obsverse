@@ -1,4 +1,5 @@
 # Website polish
+- [ ] Match Zakemod Hub's compact storefront layout in amethyst; verify search, filters and mobile layout without changing orders or payments.
 - [x] Refine store header, hero, catalog and product cards while preserving amethyst identity.
 - [x] Improve mobile layouts and navigation feedback without changing catalog data.
 - [x] Check public interactions, authenticated admin layouts, existing tests and page metadata.

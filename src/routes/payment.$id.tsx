@@ -28,6 +28,21 @@ function PaymentPage() {
     queryFn: () => { if (!token) throw new Error("Akses pesanan tidak tersedia."); return getOrder({ data: { id, token } }); },
     enabled: Boolean(token), retry: false, refetchInterval: query => ["creating", "pending"].includes(query.state.data?.status ?? "") ? 20_000 : false,
   });
+  const [now, setNow] = useState(() => Date.now());
+  const awaiting = order?.status === "pending" || order?.status === "creating";
+  useEffect(() => {
+    if (!awaiting) return;
+    const tick = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(tick);
+  }, [awaiting]);
+  const secondsLeft = order && awaiting ? paymentSecondsLeft(order.createdAt, now) : null;
+  const timedOut = secondsLeft === 0 && order?.status === "pending";
+  const expiredSync = useRef(false);
+  useEffect(() => {
+    // When the countdown reaches zero, re-verify with NexaPayz once so the final status matches the invoice.
+    if (timedOut && !expiredSync.current) { expiredSync.current = true; void refetch(); }
+    if (!timedOut) expiredSync.current = false;
+  }, [timedOut, refetch]);
   return <div className="min-h-screen"><Navbar /><main className="mx-auto max-w-2xl px-4 py-8"><BackButton />
     <div className="mb-6 flex items-center gap-3 text-primary-glow"><ShieldCheck /><h1 className="text-2xl font-bold">Status pembayaran</h1></div>
     {ready && !token ? <p role="alert" className="py-8 text-muted-foreground">Buka pesanan dari tab yang digunakan saat checkout.</p> : isPending ? <p role="status">Memuat pesanan…</p> : error ? <div className="space-y-4"><p role="alert" className="text-muted-foreground">{error.message}</p><Button variant="outline" onClick={() => refetch()}><RefreshCw />Coba lagi</Button></div> : order && <div className="space-y-6">

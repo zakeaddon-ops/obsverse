@@ -66,7 +66,7 @@ export const getPaymentOrder = createServerFn({ method: "POST" }).inputValidator
   const { data: latest } = await supabaseAdmin.from("payment_orders").select("*").eq("id", order.id).single();
   const row = latest ?? order;
   return { id: row.id, productName: row.product_name, amount: row.amount, status: row.status, environment: row.environment,
-    fulfilled: row.fulfilled, checkoutUrl: row.checkout_url ? safeCheckoutUrl(row.checkout_url) : null, verificationPending };
+    fulfilled: row.fulfilled, createdAt: row.created_at, checkoutUrl: row.checkout_url ? safeCheckoutUrl(row.checkout_url) : null, verificationPending };
 });
 
 export const getAdminPayments = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {

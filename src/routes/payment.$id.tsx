@@ -48,13 +48,14 @@ function PaymentPage() {
     {ready && !token ? <p role="alert" className="py-8 text-muted-foreground">Buka pesanan dari tab yang digunakan saat checkout.</p> : isPending ? <p role="status">Memuat pesanan…</p> : error ? <div className="space-y-4"><p role="alert" className="text-muted-foreground">{error.message}</p><Button variant="outline" onClick={() => refetch()}><RefreshCw />Coba lagi</Button></div> : order && <div className="space-y-6">
       {order.environment === "sandbox" && <p className="border-y border-border py-3 text-sm text-primary-glow">Mode uji — tanpa uang asli</p>}
       <div><p className="text-sm text-muted-foreground">Pesanan {order.id}</p><h2 className="mt-2 text-xl font-bold">{order.productName}</h2><p className="mt-3 font-display text-3xl font-bold text-primary-glow">{formatRupiah(order.amount)}</p></div>
-      <section className="space-y-3 border-y border-border py-6"><h2 className="flex items-center gap-2 text-lg font-semibold">{order.status === "paid" && <CheckCircle2 />}{PAYMENT_LABELS[order.status] ?? order.status}</h2>
+      <section className="space-y-3 border-y border-border py-6"><h2 className="flex items-center gap-2 text-lg font-semibold">{order.status === "paid" && <CheckCircle2 />}{timedOut ? PAYMENT_LABELS.expired : PAYMENT_LABELS[order.status] ?? order.status}</h2>
+        {secondsLeft !== null && !timedOut && <p role="timer" aria-live="polite" className="flex items-center gap-2 text-sm text-muted-foreground"><Timer className="text-primary-glow" />Selesaikan pembayaran dalam <span className="font-display font-bold tabular-nums text-primary-glow">{formatCountdown(secondsLeft)}</span></p>}
         {order.status === "paid" && <p className="text-sm text-muted-foreground">{order.fulfilled ? "Produk sudah diserahkan oleh admin." : "Pembayaran terverifikasi. Pesanan menunggu diproses admin."}</p>}
         {order.status === "creating" && <p className="text-sm text-muted-foreground">Pembayaran belum selesai disiapkan. Periksa status sebelum membuat pesanan baru.</p>}
-        {order.status === "expired" && <p className="text-sm text-muted-foreground">Waktu pembayaran telah habis. Jangan bayar kode dari pesanan ini.</p>}
+        {(order.status === "expired" || timedOut) && <div className="space-y-3"><p className="text-sm text-muted-foreground">Waktu pembayaran telah habis. Jangan bayar kode dari pesanan ini.</p><Button variant="outline" asChild><Link to="/">Kembali ke katalog</Link></Button></div>}
         {["failed", "cancelled"].includes(order.status) && <p className="text-sm text-muted-foreground">Pembayaran tidak selesai. Periksa riwayat transaksi sebelum mencoba pesanan baru.</p>}
         {order.verificationPending && <p role="status" className="text-sm text-muted-foreground">Verifikasi sementara belum tersedia. Coba periksa lagi.</p>}
-        {order.checkoutUrl && order.status === "pending" && <Button variant="hero" asChild><a href={order.checkoutUrl} rel="noopener noreferrer"><ExternalLink />Bayar dengan QRIS</a></Button>}
+        {order.checkoutUrl && order.status === "pending" && !timedOut && <Button variant="hero" asChild><a href={order.checkoutUrl} rel="noopener noreferrer"><ExternalLink />Bayar dengan QRIS</a></Button>}
       </section>
       <Button variant="outline" onClick={() => refetch()} disabled={isFetching}><RefreshCw className={isFetching ? "animate-spin" : ""} />Periksa status</Button>
     </div>}

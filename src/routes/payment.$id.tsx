@@ -1,13 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { CheckCircle2, ExternalLink, RefreshCw, ShieldCheck } from "lucide-react";
-import { useEffect, useState } from "react";
+import { CheckCircle2, ExternalLink, RefreshCw, ShieldCheck, Timer } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/site/BackButton";
 import { Navbar, Footer } from "@/components/site/Navbar";
 import { getPaymentOrder } from "@/lib/payments.functions";
-import { PAYMENT_LABELS } from "@/lib/payment-rules";
+import { formatCountdown, PAYMENT_LABELS, paymentSecondsLeft } from "@/lib/payment-rules";
 import { formatRupiah } from "@/lib/products";
 
 export const Route = createFileRoute("/payment/$id")({

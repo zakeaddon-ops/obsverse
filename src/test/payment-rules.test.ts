@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { canTransitionPayment, checkoutInput, mapPaymentStatus, paymentCanActivate } from "@/lib/payment-rules";
+import { canTransitionPayment, checkoutInput, formatCountdown, mapPaymentStatus, paymentCanActivate, paymentSecondsLeft, PAYMENT_WINDOW_MS } from "@/lib/payment-rules";
 
 describe("Automatic QRIS and e-wallet payments", () => {
   it("keeps payments disabled until the provider key is available", () => {
@@ -22,6 +22,20 @@ describe("Automatic QRIS and e-wallet payments", () => {
     expect(canTransitionPayment("paid", "failed")).toBe(false);
     expect(canTransitionPayment("paid", "refunded")).toBe(true);
     expect(canTransitionPayment("refunded", "paid")).toBe(false);
+  });
+  it("counts down a 15-minute payment window and never goes negative", () => {
+    const created = new Date("2026-11-07T04:00:00Z").toISOString();
+    const start = Date.parse("2026-11-07T04:00:00Z");
+    expect(PAYMENT_WINDOW_MS).toBe(15 * 60_000);
+    expect(paymentSecondsLeft(created, start)).toBe(900);
+    expect(paymentSecondsLeft(created, start + 5 * 60_000)).toBe(600);
+    expect(paymentSecondsLeft(created, start + 15 * 60_000)).toBe(0);
+    expect(paymentSecondsLeft(created, start + 60 * 60_000)).toBe(0);
+  });
+  it("formats the countdown as MM:SS", () => {
+    expect(formatCountdown(900)).toBe("15:00");
+    expect(formatCountdown(65)).toBe("01:05");
+    expect(formatCountdown(0)).toBe("00:00");
   });
   it("validates buyer inputs before creating orders", () => {
     const input = { productId: "abaf0abf-62af-4709-a1c9-0a8ed1e1d24a", token: "abaf0abf-62af-4709-a1c9-0a8ed1e1d24b", buyerName: "Kenzo", whatsapp: "08123456789", minecraftName: "Kenzo_01" };
